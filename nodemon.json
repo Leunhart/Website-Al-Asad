@@ -1,0 +1,5 @@
+{
+  "watch": ["vite.config.js", "tailwind.config.js", "postcss.config.js", "package.json"],
+  "ext": "js,json",
+  "exec": "vite"
+}
