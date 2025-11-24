@@ -2,29 +2,9 @@ import Link from 'next/link'
 
 const Dashboard = () => {
     return (
-        <div className="flex h-screen">
-            {/* Sidebar */}
-            <div className="w-64 bg-white text-gray-800 p-6 shadow-xl border-r-4 border-red-100">
-                <h2 className="text-2xl font-bold mb-8 text-red-600 border-b-2 border-red-200 pb-2">Dashboard Siswa Akademi Panahan</h2>
-                <nav className="space-y-3">
-                    <Link href="/dashboard" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-                        <span className="mr-4 text-xl">📊</span> <span className="font-medium">Dashboard</span>
-                    </Link>
-                    <Link href="/jadwal-latihan" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-                        <span className="mr-4 text-xl">📅</span> <span className="font-medium">Jadwal Latihan</span>
-                    </Link>
-                    <Link href="/peralatan" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-                        <span className="mr-4 text-xl">🔧</span> <span className="font-medium">Peralatan</span>
-                    </Link>
-                    <Link href="/info-lomba" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-                        <span className="mr-4 text-xl">🏆</span> <span className="font-medium">Info Lomba</span>
-                    </Link>
-                </nav>
-            </div>
-            {/* Main Content */}
-            <div className="flex-1 bg-white p-8">
+        <div className="bg-white p-8">
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Archery Academy Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Pengelolaan Akademi</h1>
                     <p className="text-gray-600">Welcome to the admin panel for Akademi Panahan</p>
                 </div>
                 <hr className="border-red-500 mb-10" />
@@ -82,7 +62,6 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 

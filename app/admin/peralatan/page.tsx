@@ -1,4 +1,4 @@
-const Lomba = () => {
+const Peralatan = () => {
     return (
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Tournament Management</h1>
@@ -37,4 +37,4 @@ const Lomba = () => {
     )
 }
 
-export default Lomba
+export default Peralatan
