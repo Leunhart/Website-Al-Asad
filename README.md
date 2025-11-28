@@ -1,4 +1,9 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<img width="1040" height="1111" alt="schema_IFTER drawio (1)" src="https://github.com/user-attachments/assets/290dfede-b8c6-430b-8eba-8bc116cff9e0" />This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+
+<img width="1040" height="1111" alt="schema_IFTER drawio (1)" src="https://github.com/user-attachments/assets/64b0f0e2-b752-4673-af4d-7fd553687e77" />
+
+
 
 ## Getting Started
 
