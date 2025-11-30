@@ -12,7 +12,7 @@ export default function PendaftaranPage() {
             Pendaftaran Anggota Baru
           </h1>
           <p className="text-lg opacity-85">
-            Isi formulir di bawah untuk mendaftar sebagai anggota Al-Asad Taekwondo Academy
+            Isi formulir di bawah untuk mendaftar sebagai anggota Al-Asad Panahan Academy
           </p>
         </div>
 

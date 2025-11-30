@@ -126,7 +126,7 @@ export default function RegistrationForm() {
       <div className="space-y-5">
         <h2 className="text-xl font-semibold border-b border-[#e7efe9]/20 pb-2">Informasi Tambahan</h2>
         <div>
-          <label htmlFor="experience" className="block text-sm font-medium mb-2">Pengalaman Taekwondo (Opsional)</label>
+          <label htmlFor="experience" className="block text-sm font-medium mb-2">Pengalaman Panahan (Opsional)</label>
           <textarea id="experience" name="experience" rows={3} className="w-full px-4 py-3 rounded-lg bg-[#0f1f14] border border-[#e7efe9]/20 focus:border-[#e7efe9]/50 focus:outline-none focus:ring-2 focus:ring-[#e7efe9]/20 resize-none" placeholder="Ceritakan pengalaman Anda (jika ada)" />
         </div>
         <div>

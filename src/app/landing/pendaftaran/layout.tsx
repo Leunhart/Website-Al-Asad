@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 
 export const metadata = {
-  title: 'Pendaftaran - Al-Asad Taekwondo',
-  description: 'Daftar menjadi anggota Al-Asad Taekwondo Academy',
+  title: 'Pendaftaran - Al-Asad Panahan',
+  description: 'Daftar menjadi anggota Al-Asad Panahan Academy',
 }
 
 export default function PendaftaranLayout({ children }: { children: ReactNode }) {
