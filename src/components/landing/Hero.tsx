@@ -1,34 +1,37 @@
 export default function Hero() {
   return (
-    <section className="px-6 pt-20 pb-12 max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-10">
-      <div className="flex-1">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-          Al Asad Panahan Academy
-        </h1>
-        <p className="text-lg leading-relaxed mb-6 max-w-prose">
-          Tempat berlatih Panahan yang berfokus pada pembinaan atlet, disiplin, dan
-          pencapaian prestasi. Bergabunglah bersama kami untuk memulai perjalanan
-          bela diri Anda.
-        </p>
-        <div className="flex gap-4">
-          <a
-            href="/pendaftaran"
-            className="px-6 py-3 rounded-md bg-foreground text-background font-medium hover:opacity-90 transition"
-          >
-            Daftar Sekarang
-          </a>
-          <a
-            href="#prestasi"
-            className="px-6 py-3 rounded-md border border-foreground font-medium hover:bg-foreground hover:text-background transition"
-          >
-            Lihat Prestasi
-          </a>
-        </div>
+    <section id="home" className="relative min-h-[560px] flex items-center justify-center overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        {/* External background image (ensure usage complies with copyright) */}
+        <div className="absolute inset-0 bg-[url('https://static.wikia.nocookie.net/webarebears/images/2/25/CARE1012051700029599_003_640x360.jpg')] bg-cover bg-center" />
+        <div className="absolute inset-0 bg-black/55" />
       </div>
-      <div className="flex-1 w-full max-w-md aspect-square rounded-xl bg-gradient-to-br from-foreground/10 to-foreground/30 flex items-center justify-center text-center p-6">
-        <span className="text-xl font-semibold opacity-80">
-          Foto / Ilustrasi Akademi
-        </span>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 text-[var(--green-text-primary)]">
+        <div className="max-w-2xl">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight">
+            Temukan Passion Anda dalam Club Panahan Al-Asad
+          </h1>
+          <p className="text-lg md:text-xl leading-relaxed mb-8 max-w-xl text-secondary">
+            Bergabunglah dengan klub panahan terbaik dan kembangkan kemampuan Anda bersama pelatih profesional di lingkungan alam yang asri.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="/landing/pendaftaran"
+              className="btn-primary px-7 py-3.5 font-bold"
+            >
+              Daftar Sekarang
+            </a>
+            <a
+              href="#about"
+              className="px-7 py-3.5 rounded-xl border border-[var(--green-border)] text-[var(--green-text-primary)] hover:bg-[#2e3b34] hover:border-[#2e3b34] transition-all duration-300"
+            >
+              Pelajari Lebih Lanjut
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   )
