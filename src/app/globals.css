@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
 :root {
+  /* Base (Light by default, overridden below for dark theme) */
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Green Concept Palette */
+  --green-bg-base: #192F0E; /* deep dark green */
+  --green-bg-layer: #222F1A; /* slightly lighter layer */
+  --green-bg-card: #2e3b34; /* dark desaturated green */
+  --green-bg-soft: #345243; /* muted teal green */
+  --green-accent-peach: #b9876c; /* warm accent */
+  --green-accent-muted: #5a6b63; /* gray-green */
+  --green-border: rgba(255,255,255,0.06);
+  --green-text-primary: #F5F5F3;
+  --green-text-secondary: #D8D8D4;
+  --green-button-primary: #345243;
+  --green-button-primary-hover: #2e3b34;
+  --green-button-accent: #b9876c;
+  --green-button-accent-hover: #a8755d;
 }
 
 @theme inline {
@@ -12,10 +28,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* Force dark green concept for now (can later be toggled) */
+@media (prefers-color-scheme: dark), (min-width: 0px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--green-bg-base);
+    --foreground: var(--green-text-primary);
   }
 }
 
@@ -24,3 +41,47 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Utility classes (can be mapped or replaced with Tailwind plugin later) */
+.btn-primary {
+  background-color: var(--green-button-primary);
+  color: var(--green-text-primary);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .25s, box-shadow .25s, transform .25s;
+}
+.btn-primary:hover { background-color: var(--green-button-primary-hover); box-shadow: 0 8px 32px rgba(0,0,0,0.35); }
+
+.btn-accent {
+  background-color: var(--green-button-accent);
+  color: var(--green-text-primary);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .25s, box-shadow .25s, transform .25s;
+}
+.btn-accent:hover { background-color: var(--green-button-accent-hover); box-shadow: 0 8px 32px rgba(0,0,0,0.35); }
+
+.card-soft {
+  background: var(--green-bg-card);
+  border: 1px solid var(--green-border);
+  border-radius: 1rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+}
+.card-soft-hover:hover { box-shadow: 0 18px 60px rgba(0,0,0,0.28); }
+
+.bg-soft-green { background: var(--green-bg-soft); }
+.bg-soft-peach { background: var(--green-accent-peach); }
+.bg-soft-muted { background: var(--green-accent-muted); }
+
+.text-secondary { color: var(--green-text-secondary); }
+
+/* Hero overlay helper */
+.hero-overlay { background: rgba(0,0,0,0.35); }
