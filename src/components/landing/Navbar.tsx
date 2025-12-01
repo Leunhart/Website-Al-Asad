@@ -4,13 +4,18 @@ import { useState } from 'react'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isProgramOpen, setIsProgramOpen] = useState(false)
 
   const navLinks = [
-    { href: '#home', label: 'Home' },
+    { href: '/landing', label: 'Home' },
     { href: '#about', label: 'Tentang Kami' },
     { href: '#gallery', label: 'Galeri' },
-    { href: '#programs', label: 'Program' },
     { href: '#contact', label: 'Kontak' },
+  ]
+
+  const programLinks = [
+    { href: '#programs', label: 'Program Latihan' },
+    { href: '#competitions', label: 'Lomba' },
   ]
 
   return (
@@ -28,6 +33,31 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <div className="relative">
+            <button
+              onClick={() => setIsProgramOpen(!isProgramOpen)}
+              className="hover:text-[#b9876c] transition-colors duration-300 flex items-center gap-1"
+            >
+              Program
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {isProgramOpen && (
+              <div className="absolute top-full mt-2 bg-[#192F0E] border border-white/10 rounded-lg shadow-lg py-2 min-w-[180px]">
+                {programLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsProgramOpen(false)}
+                    className="block px-4 py-2 hover:bg-[#345243] transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
         <div className="flex items-center gap-3">
           <a
@@ -79,6 +109,31 @@ export default function Navbar() {
                 {link.label}
               </a>
             ))}
+            <div>
+              <button
+                onClick={() => setIsProgramOpen(!isProgramOpen)}
+                className="py-2 text-[var(--green-text-primary)] hover:text-[#b9876c] transition-colors duration-300 flex items-center gap-1 w-full"
+              >
+                Program
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {isProgramOpen && (
+                <div className="pl-4 flex flex-col gap-2 mt-2">
+                  {programLinks.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => { setIsOpen(false); setIsProgramOpen(false); }}
+                      className="py-2 text-[var(--green-text-primary)] hover:text-[#b9876c] transition-colors duration-300"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </nav>
       )}

@@ -4,7 +4,7 @@ export default function PendaftaranPage() {
   return (
     <main className="min-h-screen py-12 px-6">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-10">
+        <div className="mb-10">
           <a href="/landing" className="inline-block mb-6 text-sm opacity-80 hover:opacity-100">
             ← Kembali ke Beranda
           </a>
