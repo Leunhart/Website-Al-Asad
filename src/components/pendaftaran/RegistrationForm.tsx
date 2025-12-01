@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, FormEvent } from 'react'
+import { registerStudent } from '@/actions/registration'
 
 interface RegistrationData {
   full_name: string
@@ -57,23 +58,36 @@ export default function RegistrationForm() {
       experience: (form.get('experience') as string || '').trim(),
       medical_notes: (form.get('medical_notes') as string || '').trim(),
     }
-    try {
-      const message = buildMessage(data)
-      setPreview(message)
-      const number = '6281261634719'
-      const waUrl = `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(message)}`
-      // Buka di tab baru agar message terisi otomatis
-      const opened = window.open(waUrl, '_blank', 'noopener,noreferrer')
-      if (opened) {
-        setAlert({ type: 'success', text: 'WhatsApp dibuka di tab baru dengan pesan sudah terisi. Cek dan klik kirim!' })
-      } else {
-        setAlert({ type: 'success', text: 'Popup diblokir browser. Klik tombol Buka WhatsApp di bawah atau aktifkan popup.' })
+    
+    // Simpan ke database dulu
+    registerStudent(data).then(result => {
+      if (!result.success) {
+        setAlert({ type: 'error', text: result.error || 'Gagal menyimpan data pendaftaran' })
+        setLoading(false)
+        return
       }
-    } catch (err) {
-      setAlert({ type: 'error', text: 'Terjadi kesalahan. Coba lagi.' })
-    } finally {
+      
+      // Kalau berhasil simpan, baru kirim ke WhatsApp
+      try {
+        const message = buildMessage(data)
+        setPreview(message)
+        const number = '6285603382482'
+        const waUrl = `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(message)}`
+        const opened = window.open(waUrl, '_blank', 'noopener,noreferrer')
+        if (opened) {
+          setAlert({ type: 'success', text: 'Data berhasil disimpan! WhatsApp dibuka di tab baru dengan pesan sudah terisi. Cek dan klik kirim!' })
+        } else {
+          setAlert({ type: 'success', text: 'Data berhasil disimpan! Popup diblokir browser. Klik tombol Buka WhatsApp di bawah atau aktifkan popup.' })
+        }
+      } catch (err) {
+        setAlert({ type: 'error', text: 'Data tersimpan tapi gagal membuka WhatsApp. Coba lagi.' })
+      } finally {
+        setLoading(false)
+      }
+    }).catch(() => {
+      setAlert({ type: 'error', text: 'Terjadi kesalahan sistem. Coba lagi.' })
       setLoading(false)
-    }
+    })
   }
 
   function handleCopy() {
@@ -156,7 +170,7 @@ export default function RegistrationForm() {
                 📋 Salin Pesan
               </button>
               <a
-                href={`https://api.whatsapp.com/send?phone=6281261634719&text=${encodeURIComponent(preview)}`}
+                href={`https://api.whatsapp.com/send?phone=6285603382482&text=${encodeURIComponent(preview)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3 px-4 rounded-lg bg-[#25D366] hover:bg-[#20BA5A] text-white font-semibold text-center transition-all text-sm"

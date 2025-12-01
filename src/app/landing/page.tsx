@@ -1,5 +1,6 @@
 import { getAchievements } from '@/actions/achievements'
 import { getCoaches } from '@/actions/coaches'
+import { getTestimonials } from '@/actions/testimonials'
 import Hero from '@/components/landing/Hero'
 import About from '@/components/landing/About'
 import Gallery from '@/components/landing/Gallery'
@@ -14,9 +15,10 @@ import CallToAction from '@/components/landing/CallToAction'
 import Footer from '@/components/landing/Footer'
 
 export default async function LandingPage() {
-	const [achievements, coaches] = await Promise.all([
+	const [achievements, coaches, testimonials] = await Promise.all([
 		getAchievements(),
 		getCoaches(),
+		getTestimonials(),
 	])
 
 	const topAchievements = achievements.slice(0, 3)
@@ -42,7 +44,7 @@ export default async function LandingPage() {
 				<h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">Pelatih Kami</h2>
 				<CoachesPreview coaches={topCoaches} />
 			</section>
-			<Testimonials />
+			<Testimonials testimonials={testimonials} />
 			<CallToAction />
 			<Footer />
 		</main>

@@ -53,10 +53,12 @@ function CompetitionCard({ c, i }: { c: Competition; i: number }) {
         </div>
         <div>
           <a
-            href="#"
-            className="inline-block mt-2 px-4 py-2 rounded-md border border-foreground/20 hover:bg-foreground hover:text-background text-sm font-medium"
+            href={`https://wa.me/6285603382482?text=${encodeURIComponent(`Halo, saya mau bertanya soal lomba "${c.event_name}"`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block mt-2 px-4 py-2 rounded-md border border-foreground/20 hover:bg-foreground hover:text-background text-sm font-medium transition-colors"
           >
-            Daftar Sekarang
+            Tanya via WhatsApp
           </a>
         </div>
       </div>

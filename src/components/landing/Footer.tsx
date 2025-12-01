@@ -19,7 +19,7 @@ export default function Footer() {
             <div className="text-sm space-y-3 opacity-90 text-[#EEEAE4]/80">
               <p>📧 Email: info@alasad.com</p>
               <p>📱 WhatsApp: +62 812-3456-7890</p>
-              <p>📍 Lokasi: Yogyakarta, Indonesia</p>
+              <p>📍 Lokasi: Ciamis, Jawa Barat, Indonesia</p>
             </div>
           </div>
           <div>
