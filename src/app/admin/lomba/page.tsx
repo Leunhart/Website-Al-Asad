@@ -1,50 +1,142 @@
+'use client'
+
+import { useState } from 'react'
+import LombaForm from '@/src/components/forms/LombaForm'
+
 const Lomba = () => {
+    const [isFormOpen, setIsFormOpen] = useState(false)
+
+    const handleAddLomba = (data: any) => {
+        console.log('Adding lomba:', data)
+        // TODO: Implement API call to add lomba
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-semibold">Manajemen Lomba</h1>
-                <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow">
-                    + Tambah Lomba
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">Manajemen Lomba</h1>
+                    <p className="text-gray-600 mt-1">Kelola kompetisi dan turnamen panahan</p>
+                </div>
+                <button
+                    onClick={() => setIsFormOpen(true)}
+                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                >
+                    <span className="text-lg">+</span>
+                    Tambah Lomba
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                {/* CARD 1 */}
-                <div className="border rounded-xl p-5 bg-white shadow-sm hover:shadow-md transition">
-                    <h2 className="text-lg font-semibold mb-1">National Archery Championship</h2>
-                    <p className="text-sm text-gray-500 mb-3">2023-12-01</p>
+            <LombaForm
+                isOpen={isFormOpen}
+                onClose={() => setIsFormOpen(false)}
+                onSubmit={handleAddLomba}
+            />
 
-                    <span className="px-3 py-1 text-sm rounded-full bg-green-100 text-green-700">
-                        Active
-                    </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                    <div className="flex gap-3 mt-4">
-                        <button className="px-3 py-1 text-sm rounded bg-yellow-500 text-white">
-                            Edit
-                        </button>
-                        <button className="px-3 py-1 text-sm rounded bg-red-500 text-white">
-                            Delete
-                        </button>
+                {/* Competition Card 1 */}
+                <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
+                    <div className="bg-slate-50 p-4 border-b border-gray-100">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-slate-200 rounded-full p-2">
+                                <span className="text-slate-600 text-xl">🏆</span>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-900 text-lg">National Championship</h3>
+                                <p className="text-gray-500 text-sm">1-3 Desember 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="p-4">
+                        <div className="flex justify-between items-center mb-3">
+                            <span className="px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium border border-green-200">
+                                Aktif
+                            </span>
+                            <span className="text-sm text-gray-500">Jakarta</span>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-4">Kejuaraan nasional panahan kategori compound</p>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-700">Peserta: 50 tim</span>
+                            <div className="flex gap-2">
+                                <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
+                                    Edit
+                                </button>
+                                <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* CARD 2 */}
-                <div className="border rounded-xl p-5 bg-white shadow-sm hover:shadow-md transition">
-                    <h2 className="text-lg font-semibold mb-1">Youth Archery Cup</h2>
-                    <p className="text-sm text-gray-500 mb-3">2024-01-15</p>
+                {/* Competition Card 2 */}
+                <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
+                    <div className="bg-slate-50 p-4 border-b border-gray-100">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-slate-200 rounded-full p-2">
+                                <span className="text-slate-600 text-xl">🎯</span>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-900 text-lg">Youth Archery Cup</h3>
+                                <p className="text-gray-500 text-sm">15-17 Januari 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="p-4">
+                        <div className="flex justify-between items-center mb-3">
+                            <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-200">
+                                Upcoming
+                            </span>
+                            <span className="text-sm text-gray-500">Surabaya</span>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-4">Kompetisi pemuda panahan se-Jawa Timur</p>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-700">Peserta: 30 atlet</span>
+                            <div className="flex gap-2">
+                                <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
+                                    Edit
+                                </button>
+                                <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <span className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-700">
-                        Upcoming
-                    </span>
-
-                    <div className="flex gap-3 mt-4">
-                        <button className="px-3 py-1 text-sm rounded bg-yellow-500 text-white">
-                            Edit
-                        </button>
-                        <button className="px-3 py-1 text-sm rounded bg-red-500 text-white">
-                            Delete
-                        </button>
+                {/* Competition Card 3 */}
+                <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
+                    <div className="bg-slate-50 p-4 border-b border-gray-100">
+                        <div className="flex items-center gap-3">
+                            <div className="bg-slate-200 rounded-full p-2">
+                                <span className="text-slate-600 text-xl">🏅</span>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-gray-900 text-lg">Regional Qualifier</h3>
+                                <p className="text-gray-500 text-sm">5-7 Februari 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="p-4">
+                        <div className="flex justify-between items-center mb-3">
+                            <span className="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs font-medium border border-yellow-200">
+                                Registrasi
+                            </span>
+                            <span className="text-sm text-gray-500">Bandung</span>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-4">Kualifikasi regional untuk kejuaraan nasional</p>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-medium text-gray-700">Peserta: 25 atlet</span>
+                            <div className="flex gap-2">
+                                <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
+                                    Edit
+                                </button>
+                                <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
+                                    Hapus
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

@@ -1,25 +1,28 @@
 import Link from 'next/link'
-import { User, Trophy, LayoutDashboard, ToolCaseIcon, Link2Icon } from 'lucide-react'
+import { User, Trophy, LayoutDashboard, ToolCaseIcon, Link2Icon, Award } from 'lucide-react'
 
 const Sidebar = () => {
   return (
-    <div className="w-64 bg-white text-gray-800 p-6 shadow-xl border-r-4 border-red-100">
-      <h2 className="text-2xl font-bold mb-8 text-red-600 border-b-2 border-red-200 pb-2">Admin Panel</h2>
-      <nav className="space-y-3">
-        <Link href="/admin/dashboard" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-          <span className="mr-4 text-xl"><LayoutDashboard size={20}/></span> <span className="font-medium">Dashboard</span>
+    <div className="w-64 bg-white text-gray-800 p-6 shadow-sm border-r-2 border-red-900">
+      <h2 className="text-xl font-semibold mb-8 text-red-900 border-b border-red-200 pb-2">Admin Panel</h2>
+      <nav className="space-y-2">
+        <Link href="/admin/dashboard" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+          <span className="mr-3 text-gray-500"><LayoutDashboard size={18}/></span> <span className="font-medium text-gray-700">Dashboard</span>
         </Link>
-        <Link href="/admin/anggota" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-          <span className="mr-4 text-xl"><User size={20}/></span> <span className="font-medium">Anggota</span>
+        <Link href="/admin/anggota" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+          <span className="mr-3 text-gray-500"><User size={18}/></span> <span className="font-medium text-gray-700">Anggota</span>
         </Link>
-        <Link href="/admin/lomba" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-          <span className="mr-4 text-xl"><Trophy size={20}/></span> <span className="font-medium">Lomba</span>
+        <Link href="/admin/lomba" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+          <span className="mr-3 text-gray-500"><Trophy size={18}/></span> <span className="font-medium text-gray-700">Lomba</span>
         </Link>
-        <Link href="/admin/peralatan" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">
-          <span className="mr-4 text-xl"><ToolCaseIcon size={20}/></span> <span className="font-medium">Peralatan</span>
+        <Link href="/admin/peralatan" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+          <span className="mr-3 text-gray-500"><ToolCaseIcon size={18}/></span> <span className="font-medium text-gray-700">Peralatan</span>
         </Link>
-        <Link href="/admin/jadwal" className="flex items-center py-4 px-5 rounded-xl hover:bg-red-50 hover:text-red-700 transition-all duration-200 border-l-4 border-transparent hover:border-red-500">  
-          <span className="mr-4 text-xl"><Link2Icon size={20}/></span> <span className="font-medium">Jadwal Latihan</span>
+        <Link href="/admin/jadwal" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+          <span className="mr-3 text-gray-500"><Link2Icon size={18}/></span> <span className="font-medium text-gray-700">Jadwal Latihan</span>
+        </Link>
+        <Link href="/admin/prestasi" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+          <span className="mr-3 text-gray-500"><Award size={18}/></span> <span className="font-medium text-gray-700">Prestasi</span>
         </Link>
       </nav>
     </div>

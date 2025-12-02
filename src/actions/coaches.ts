@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
-import { Coach } from '@/types/database'
+import { supabase } from '../lib/supabase'
+import { Coach } from '../types/database'
 
 export async function getCoaches() {
   try {
@@ -15,7 +15,7 @@ export async function getCoaches() {
       return []
     }
 
-    return data as Coach[]
+    return data || []
   } catch (error) {
     console.error('Unexpected error fetching coaches:', error)
     return []

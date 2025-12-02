@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
-import { Achievement } from '@/types/database'
+import { supabase } from '../lib/supabase'
+import { Achievement } from '../types/database'
 
 export async function getAchievements() {
   try {
@@ -15,7 +15,7 @@ export async function getAchievements() {
       return []
     }
 
-    return data as Achievement[]
+    return data || []
   } catch (error) {
     console.error('Unexpected error fetching achievements:', error)
     return []

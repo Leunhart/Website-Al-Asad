@@ -1,6 +1,7 @@
 'use server'
 
-import { createClient } from '@/lib/supabase-server'
+import { createClient } from '../lib/supabase-server'
+import { supabase } from '../lib/supabase'
 import { redirect } from 'next/navigation'
 
 export async function login(formData: FormData) {
@@ -22,7 +23,6 @@ export async function login(formData: FormData) {
 }
 
 export async function logout() {
-  const supabase = await createClient()
   await supabase.auth.signOut()
   redirect('/auth/login')
 }
