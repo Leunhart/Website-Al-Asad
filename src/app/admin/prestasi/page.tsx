@@ -7,10 +7,26 @@ import PrestasiForm from '@/src/components/forms/PrestasiForm'
 
 const Prestasi = () => {
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingData, setEditingData] = useState<any>(null)
 
   const handleAddPrestasi = (data: any) => {
     console.log('Adding prestasi:', data)
     // TODO: Implement API call to add prestasi
+  }
+
+  const handleEditPrestasi = (data: any) => {
+    console.log('Editing prestasi:', data)
+    // TODO: Implement API call to edit prestasi
+  }
+
+  const openAddForm = () => {
+    setEditingData(null)
+    setIsFormOpen(true)
+  }
+
+  const openEditForm = (prestasiData: any) => {
+    setEditingData(prestasiData)
+    setIsFormOpen(true)
   }
 
   return (
@@ -21,7 +37,7 @@ const Prestasi = () => {
           <p className="text-gray-600 mt-1">Kelola pencapaian dan penghargaan atlet panahan</p>
         </div>
         <button
-          onClick={() => setIsFormOpen(true)}
+          onClick={openAddForm}
           className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
         >
           <span className="text-lg">+</span>
@@ -32,7 +48,8 @@ const Prestasi = () => {
       <PrestasiForm
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
-        onSubmit={handleAddPrestasi}
+        onSubmit={editingData ? handleEditPrestasi : handleAddPrestasi}
+        initialData={editingData}
       />
 
       {/* Placeholder for achievements list - will be populated from database */}

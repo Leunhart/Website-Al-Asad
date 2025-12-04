@@ -5,10 +5,26 @@ import JadwalForm from '@/src/components/forms/JadwalForm'
 
 const Jadwal = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
+    const [editingData, setEditingData] = useState<any>(null)
 
     const handleAddJadwal = (data: any) => {
         console.log('Adding jadwal:', data)
         // TODO: Implement API call to add jadwal
+    }
+
+    const handleEditJadwal = (data: any) => {
+        console.log('Editing jadwal:', data)
+        // TODO: Implement API call to edit jadwal
+    }
+
+    const openAddForm = () => {
+        setEditingData(null)
+        setIsFormOpen(true)
+    }
+
+    const openEditForm = (jadwalData: any) => {
+        setEditingData(jadwalData)
+        setIsFormOpen(true)
     }
 
     return (
@@ -19,7 +35,7 @@ const Jadwal = () => {
                     <p className="text-gray-600 mt-1">Kelola jadwal latihan dan sesi pelatihan</p>
                 </div>
                 <button
-                    onClick={() => setIsFormOpen(true)}
+                    onClick={openAddForm}
                     className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
                 >
                     <span className="text-lg">+</span>
@@ -30,7 +46,8 @@ const Jadwal = () => {
             <JadwalForm
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
-                onSubmit={handleAddJadwal}
+                onSubmit={editingData ? handleEditJadwal : handleAddJadwal}
+                initialData={editingData}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -58,7 +75,19 @@ const Jadwal = () => {
                         <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700">Coach: Ahmad Rahman</span>
                             <div className="flex gap-2">
-                                <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
+                                <button
+                                    onClick={() => openEditForm({
+                                        title: "Latihan Pagi",
+                                        day: "Senin",
+                                        start_time: "06:00",
+                                        end_time: "08:00",
+                                        location: "Lapangan A",
+                                        coach_name: "Ahmad Rahman",
+                                        max_participants: 10,
+                                        description: "Latihan dasar dan teknik shooting"
+                                    })}
+                                    className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
+                                >
                                     Edit
                                 </button>
                                 <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">

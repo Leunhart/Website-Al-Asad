@@ -5,10 +5,26 @@ import LombaForm from '@/src/components/forms/LombaForm'
 
 const Lomba = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
+    const [editingData, setEditingData] = useState<any>(null)
 
     const handleAddLomba = (data: any) => {
         console.log('Adding lomba:', data)
         // TODO: Implement API call to add lomba
+    }
+
+    const handleEditLomba = (data: any) => {
+        console.log('Editing lomba:', data)
+        // TODO: Implement API call to edit lomba
+    }
+
+    const openAddForm = () => {
+        setEditingData(null)
+        setIsFormOpen(true)
+    }
+
+    const openEditForm = (lombaData: any) => {
+        setEditingData(lombaData)
+        setIsFormOpen(true)
     }
 
     return (
@@ -19,7 +35,7 @@ const Lomba = () => {
                     <p className="text-gray-600 mt-1">Kelola kompetisi dan turnamen panahan</p>
                 </div>
                 <button
-                    onClick={() => setIsFormOpen(true)}
+                    onClick={openAddForm}
                     className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
                 >
                     <span className="text-lg">+</span>
@@ -30,7 +46,8 @@ const Lomba = () => {
             <LombaForm
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
-                onSubmit={handleAddLomba}
+                onSubmit={editingData ? handleEditLomba : handleAddLomba}
+                initialData={editingData}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -59,7 +76,16 @@ const Lomba = () => {
                         <div className="flex items-center justify-between">
                             <span className="text-sm font-medium text-gray-700">Peserta: 50 tim</span>
                             <div className="flex gap-2">
-                                <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
+                                <button
+                                    onClick={() => openEditForm({
+                                        event_name: "National Championship",
+                                        organizer: "PB PASI",
+                                        location: "Jakarta",
+                                        start_date: "2023-12-01",
+                                        end_date: "2023-12-03"
+                                    })}
+                                    className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
+                                >
                                     Edit
                                 </button>
                                 <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">

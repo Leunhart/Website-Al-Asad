@@ -5,10 +5,26 @@ import PeralatanForm from '@/src/components/forms/PeralatanForm'
 
 const Peralatan = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
+    const [editingData, setEditingData] = useState<any>(null)
 
     const handleAddPeralatan = (data: any) => {
         console.log('Adding peralatan:', data)
         // TODO: Implement API call to add peralatan
+    }
+
+    const handleEditPeralatan = (data: any) => {
+        console.log('Editing peralatan:', data)
+        // TODO: Implement API call to edit peralatan
+    }
+
+    const openAddForm = () => {
+        setEditingData(null)
+        setIsFormOpen(true)
+    }
+
+    const openEditForm = (peralatanData: any) => {
+        setEditingData(peralatanData)
+        setIsFormOpen(true)
     }
 
     return (
@@ -19,7 +35,7 @@ const Peralatan = () => {
                     <p className="text-gray-600 mt-1">Kelola inventaris dan kondisi peralatan panahan</p>
                 </div>
                 <button
-                    onClick={() => setIsFormOpen(true)}
+                    onClick={openAddForm}
                     className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
                 >
                     <span className="text-lg">+</span>
@@ -30,7 +46,8 @@ const Peralatan = () => {
             <PeralatanForm
                 isOpen={isFormOpen}
                 onClose={() => setIsFormOpen(false)}
-                onSubmit={handleAddPeralatan}
+                onSubmit={editingData ? handleEditPeralatan : handleAddPeralatan}
+                initialData={editingData}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -56,7 +73,16 @@ const Peralatan = () => {
                         </div>
                         <p className="text-gray-600 text-sm mb-4">Busur compound profesional untuk latihan</p>
                         <div className="flex gap-2">
-                            <button className="flex-1 px-3 py-2 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
+                            <button
+                                onClick={() => openEditForm({
+                                    name: "Busur Compound",
+                                    type: "Busur",
+                                    quantity: 15,
+                                    condition: "Tersedia",
+                                    location: "Gudang A"
+                                })}
+                                className="flex-1 px-3 py-2 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
+                            >
                                 Edit
                             </button>
                             <button className="flex-1 px-3 py-2 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
