@@ -55,3 +55,29 @@ export interface User {
   updated_at: string | null;
   id_coaches: number | null;
 }
+
+export interface Student {
+  id_students: number; 
+  full_name: string;
+  gender: string | null;
+  date_of_birth: string | null;
+  level: string | null;
+  achivements: string | null;
+  address: string | null;
+  status: string | null; // expected: active | inactive
+  id_academies: number;
+}
+
+export interface Registration {
+  id_registrations: string; // uuid
+  full_name: string;
+  gender: string | null;
+  date_of_birth: string | null;
+  phone: string | null;
+  address: string | null;
+  level_requested: string | null;
+  status: string | null; // pending | diterima | ditolak
+  id_academies: number | null;
+  student_id: number | null;
+  created_at: string | null;
+}
