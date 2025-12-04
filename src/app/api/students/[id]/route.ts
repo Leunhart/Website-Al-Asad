@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
+import { requireAdmin } from '@/src/actions/auth'
 import {
   getStudentById,
   updateStudent,
   deleteStudent,
   UpdateStudentInput,
-} from '@/actions/students'
+} from '@/src/actions/students'
 
 type RouteContext = {
   params: Promise<{

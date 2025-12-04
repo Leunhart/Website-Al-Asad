@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
-import { Testimonial } from '@/types/database'
+import { supabase } from '../lib/supabase'
+import { Testimonial } from '../types/database'
 
 export type NewTestimonialInput = {
   reviewer_name: string

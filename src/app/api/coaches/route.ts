@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
+import { requireAdmin } from '@/src/actions/auth'
 import {
   getCoaches,
   createCoach,
   NewCoachInput,
-} from '@/actions/coaches'
+} from '@/src/actions/coaches'
 
 // PUBLIC: list coaches
 export async function GET() {

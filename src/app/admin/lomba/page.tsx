@@ -1,20 +1,90 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import LombaForm from '@/src/components/forms/LombaForm'
+import { getCompetitions, createCompetition, updateCompetition, deleteCompetition } from '../../../actions/competitions'
 
 const Lomba = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [editingData, setEditingData] = useState<any>(null)
+    const [competitions, setCompetitions] = useState<any[]>([])
+    const [loading, setLoading] = useState(true)
 
-    const handleAddLomba = (data: any) => {
-        console.log('Adding lomba:', data)
-        // TODO: Implement API call to add lomba
+    useEffect(() => {
+        loadCompetitions()
+    }, [])
+
+    const loadCompetitions = async () => {
+        try {
+            const competitionData = await getCompetitions()
+            setCompetitions(competitionData)
+        } catch (error) {
+            console.error('Error loading competitions:', error)
+        } finally {
+            setLoading(false)
+        }
     }
 
-    const handleEditLomba = (data: any) => {
-        console.log('Editing lomba:', data)
-        // TODO: Implement API call to edit lomba
+    const handleAddLomba = async (data: any): Promise<void> => {
+        try {
+            const competitionData = {
+                event_name: data.event_name,
+                organizer: data.organizer,
+                location: data.location,
+                start_date: data.start_date,
+                end_date: data.end_date
+            }
+
+            const result = await createCompetition(competitionData)
+            if (result) {
+                await loadCompetitions() // Refresh the list
+                console.log('Lomba berhasil ditambahkan')
+            } else {
+                console.error('Error adding lomba')
+            }
+        } catch (error) {
+            console.error('Error adding lomba:', error)
+        }
+    }
+
+    const handleEditLomba = async (data: any) => {
+        try {
+            if (!editingData?.id_competitions) return
+
+            const competitionData = {
+                event_name: data.event_name,
+                organizer: data.organizer,
+                location: data.location,
+                start_date: data.start_date,
+                end_date: data.end_date
+            }
+
+            const result = await updateCompetition(editingData.id_competitions, competitionData)
+            if (result) {
+                await loadCompetitions() // Refresh the list
+                console.log('Lomba berhasil diperbarui')
+            } else {
+                console.error('Error updating lomba')
+            }
+        } catch (error) {
+            console.error('Error updating lomba:', error)
+        }
+    }
+
+    const handleDeleteLomba = async (id: number) => {
+        if (!confirm('Apakah Anda yakin ingin menghapus lomba ini?')) return
+
+        try {
+            const success = await deleteCompetition(id)
+            if (success) {
+                await loadCompetitions() // Refresh the list
+                console.log('Lomba berhasil dihapus')
+            } else {
+                console.error('Error deleting lomba')
+            }
+        } catch (error) {
+            console.error('Error deleting lomba:', error)
+        }
     }
 
     const openAddForm = () => {
@@ -51,121 +121,83 @@ const Lomba = () => {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                {/* Competition Card 1 */}
-                <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
-                    <div className="bg-slate-50 p-4 border-b border-gray-100">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-slate-200 rounded-full p-2">
-                                <span className="text-slate-600 text-xl">🏆</span>
+                {loading ? (
+                    <div className="col-span-full text-center py-8">
+                        <p>Loading...</p>
+                    </div>
+                ) : competitions.length > 0 ? competitions.map((competition: any) => (
+                    <div key={competition.id_competitions} className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
+                        <div className="bg-slate-50 p-4 border-b border-gray-100">
+                            <div className="flex items-center gap-3">
+                                <div className="bg-slate-200 rounded-full p-2">
+                                    <span className="text-slate-600 text-xl">🏆</span>
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-gray-900 text-lg">{competition.event_name}</h3>
+                                    <p className="text-gray-500 text-sm">
+                                        {competition.start_date && competition.end_date
+                                            ? `${new Date(competition.start_date).toLocaleDateString('id-ID')} - ${new Date(competition.end_date).toLocaleDateString('id-ID')}`
+                                            : 'Tanggal belum ditentukan'
+                                        }
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="font-semibold text-gray-900 text-lg">National Championship</h3>
-                                <p className="text-gray-500 text-sm">1-3 Desember 2023</p>
+                        </div>
+                        <div className="p-4">
+                            <div className="flex justify-between items-center mb-3">
+                                <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                                    new Date(competition.start_date) > new Date()
+                                        ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                        : new Date(competition.end_date) >= new Date()
+                                        ? 'bg-green-50 text-green-700 border-green-200'
+                                        : 'bg-gray-50 text-gray-700 border-gray-200'
+                                }`}>
+                                    {new Date(competition.start_date) > new Date()
+                                        ? 'Upcoming'
+                                        : new Date(competition.end_date) >= new Date()
+                                        ? 'Aktif'
+                                        : 'Selesai'
+                                    }
+                                </span>
+                                <span className="text-sm text-gray-500">{competition.location || 'Lokasi belum ditentukan'}</span>
+                            </div>
+                            <p className="text-gray-600 text-sm mb-4">
+                                {competition.organizer ? `Diselenggarakan oleh: ${competition.organizer}` : 'Penyelenggara belum ditentukan'}
+                            </p>
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm font-medium text-gray-700">
+                                    ID: {competition.id_competitions}
+                                </span>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => openEditForm({
+                                            event_name: competition.event_name,
+                                            organizer: competition.organizer || '',
+                                            location: competition.location || '',
+                                            start_date: competition.start_date ? competition.start_date.split('T')[0] : '',
+                                            end_date: competition.end_date ? competition.end_date.split('T')[0] : ''
+                                        })}
+                                        className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteLomba(competition.id_competitions)}
+                                        className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200"
+                                    >
+                                        Hapus
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="p-4">
-                        <div className="flex justify-between items-center mb-3">
-                            <span className="px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium border border-green-200">
-                                Aktif
-                            </span>
-                            <span className="text-sm text-gray-500">Jakarta</span>
-                        </div>
-                        <p className="text-gray-600 text-sm mb-4">Kejuaraan nasional panahan kategori compound</p>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">Peserta: 50 tim</span>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => openEditForm({
-                                        event_name: "National Championship",
-                                        organizer: "PB PASI",
-                                        location: "Jakarta",
-                                        start_date: "2023-12-01",
-                                        end_date: "2023-12-03"
-                                    })}
-                                    className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
-                                >
-                                    Edit
-                                </button>
-                                <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
-                                    Hapus
-                                </button>
-                            </div>
-                        </div>
+                )) : (
+                    <div className="col-span-full bg-gray-50 rounded-xl p-8 text-center">
+                        <div className="text-6xl mb-4">🏆</div>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Belum ada lomba</h3>
+                        <p className="text-gray-500">Tambahkan lomba pertama untuk memulai</p>
                     </div>
-                </div>
-
-                {/* Competition Card 2 */}
-                <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
-                    <div className="bg-slate-50 p-4 border-b border-gray-100">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-slate-200 rounded-full p-2">
-                                <span className="text-slate-600 text-xl">🎯</span>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-gray-900 text-lg">Youth Archery Cup</h3>
-                                <p className="text-gray-500 text-sm">15-17 Januari 2024</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="p-4">
-                        <div className="flex justify-between items-center mb-3">
-                            <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-200">
-                                Upcoming
-                            </span>
-                            <span className="text-sm text-gray-500">Surabaya</span>
-                        </div>
-                        <p className="text-gray-600 text-sm mb-4">Kompetisi pemuda panahan se-Jawa Timur</p>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">Peserta: 30 atlet</span>
-                            <div className="flex gap-2">
-                                <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
-                                    Edit
-                                </button>
-                                <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
-                                    Hapus
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Competition Card 3 */}
-                <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden">
-                    <div className="bg-slate-50 p-4 border-b border-gray-100">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-slate-200 rounded-full p-2">
-                                <span className="text-slate-600 text-xl">🏅</span>
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-gray-900 text-lg">Regional Qualifier</h3>
-                                <p className="text-gray-500 text-sm">5-7 Februari 2024</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="p-4">
-                        <div className="flex justify-between items-center mb-3">
-                            <span className="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-xs font-medium border border-yellow-200">
-                                Registrasi
-                            </span>
-                            <span className="text-sm text-gray-500">Bandung</span>
-                        </div>
-                        <p className="text-gray-600 text-sm mb-4">Kualifikasi regional untuk kejuaraan nasional</p>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium text-gray-700">Peserta: 25 atlet</span>
-                            <div className="flex gap-2">
-                                <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300">
-                                    Edit
-                                </button>
-                                <button className="px-3 py-1 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
-                                    Hapus
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                )}
             </div>
         </div>
     )

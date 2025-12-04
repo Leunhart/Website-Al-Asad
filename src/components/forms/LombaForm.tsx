@@ -5,7 +5,7 @@ import { useState } from 'react'
 interface LombaFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: LombaData) => void
+  onSubmit: (data: LombaData) => Promise<void> | void
   initialData?: LombaData
 }
 
@@ -26,10 +26,28 @@ const LombaForm = ({ isOpen, onClose, onSubmit, initialData }: LombaFormProps) =
     end_date: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = () => {
+    setFormData({
+      event_name: '',
+      organizer: '',
+      location: '',
+      start_date: '',
+      end_date: ''
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
-    onClose()
+    try {
+      await onSubmit(formData)
+      if (!initialData) {
+        resetForm() // Only reset if it's an add form (not edit)
+      }
+      onClose()
+    } catch (error) {
+      // Error handling is done in the parent component
+      console.error('Form submission error:', error)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

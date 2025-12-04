@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
-import { Student } from '@/types/database'
+import { supabase } from '@/src/lib/supabase'
+import { Student } from '@/src/types/database'
 
 export type NewStudentInput = {
   full_name: string

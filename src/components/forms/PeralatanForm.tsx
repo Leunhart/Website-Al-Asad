@@ -5,7 +5,7 @@ import { useState } from 'react'
 interface PeralatanFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: PeralatanData) => void
+  onSubmit: (data: PeralatanData) => Promise<void> | void
   initialData?: PeralatanData
 }
 
@@ -26,10 +26,28 @@ const PeralatanForm = ({ isOpen, onClose, onSubmit, initialData }: PeralatanForm
     location: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      type: '',
+      quantity: 1,
+      condition: 'Tersedia',
+      location: ''
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
-    onClose()
+    try {
+      await onSubmit(formData)
+      if (!initialData) {
+        resetForm() // Reset form untuk tambah peralatan baru
+      }
+      onClose()
+    } catch (error) {
+      // Error handling is done in the parent component
+      console.error('Form submission error:', error)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

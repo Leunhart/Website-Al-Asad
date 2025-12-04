@@ -36,6 +36,29 @@ export interface Competition {
   id_academies: number | null;
 }
 
+export interface Equipment {
+  id_equipment: number;
+  name: string;
+  type: string;
+  quantity: number;
+  condition: string;
+  location: string;
+  id_academies: number | null;
+}
+
+export interface Schedule {
+  id_schedules: number;
+  title: string;
+  day: string;
+  start_time: string;
+  end_time: string;
+  location: string;
+  coach_name: string;
+  max_participants: number;
+  description: string | null;
+  id_academies: number | null;
+}
+
 export interface Testimonial {
   unique_id: number;
   reviewer_name: string;

@@ -5,7 +5,7 @@ import { useState } from 'react'
 interface JadwalFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: JadwalData) => void
+  onSubmit: (data: JadwalData) => Promise<void> | void
   initialData?: JadwalData
 }
 
@@ -32,10 +32,31 @@ const JadwalForm = ({ isOpen, onClose, onSubmit, initialData }: JadwalFormProps)
     description: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      day: '',
+      start_time: '',
+      end_time: '',
+      location: '',
+      coach_name: '',
+      max_participants: 10,
+      description: ''
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
-    onClose()
+    try {
+      await onSubmit(formData)
+      if (!initialData) {
+        resetForm() // Only reset if it's an add form (not edit)
+      }
+      onClose()
+    } catch (error) {
+      // Error handling is done in the parent component
+      console.error('Form submission error:', error)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
-import { createClient } from '@/lib/supabase-server'
-import { Registration } from '@/types/database'
+import { requireAdmin } from '@/src/actions/auth'
+import { createClient } from '@/src/lib/supabase-server'
+import { Registration } from '@/src/types/database'
 
 // ADMIN ONLY: list pending registrations
 export async function GET() {

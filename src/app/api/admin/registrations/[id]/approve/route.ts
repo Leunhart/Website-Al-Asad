@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
-import { createClient } from '@/lib/supabase-server'
-import { Student, Registration } from '@/types/database'
+import { requireAdmin } from '@/src/actions/auth'
+import { createClient } from '@/src//lib/supabase-server'
+import { Student, Registration } from '@/src/types/database'
 
 type RouteContext = {
   params: Promise<{

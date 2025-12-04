@@ -5,7 +5,7 @@ import { useState } from 'react'
 interface PrestasiFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: PrestasiData) => void
+  onSubmit: (data: PrestasiData) => Promise<void> | void
   initialData?: PrestasiData
 }
 
@@ -28,10 +28,29 @@ const PrestasiForm = ({ isOpen, onClose, onSubmit, initialData }: PrestasiFormPr
     description: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const resetForm = () => {
+    setFormData({
+      event_name: '',
+      athlete_name: '',
+      date: '',
+      category: '',
+      achievement_type: '',
+      description: ''
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(formData)
-    onClose()
+    try {
+      await onSubmit(formData)
+      if (!initialData) {
+        resetForm() // reset form untuk tambah prestasi baru
+      }
+      onClose()
+    } catch (error) {
+      // Error handling is done in the parent component
+      console.error('Form submission error:', error)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {

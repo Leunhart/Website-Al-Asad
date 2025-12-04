@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
-import { Competition } from '@/types/database'
+import { supabase } from '../lib/supabase'
+import { Competition } from '../types/database'
 
 export type NewCompetitionInput = {
   event_name: string

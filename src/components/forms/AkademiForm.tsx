@@ -2,52 +2,37 @@
 
 import { useState } from 'react'
 
-interface AnggotaFormProps {
+interface AkademiFormProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (data: AnggotaData) => Promise<void> | void
-  initialData?: AnggotaData
+  onSubmit: (data: AkademiData) => void
+  initialData?: AkademiData
 }
 
-interface AnggotaData {
-  full_name: string
+interface AkademiData {
+  name: string
   phone: string
   email: string
-  role: 'Atlet' | 'Pelatih'
+  address: string
+  logo: string
 }
 
-const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProps) => {
-  const [formData, setFormData] = useState<AnggotaData>(initialData || {
-    full_name: '',
+const AkademiForm = ({ isOpen, onClose, onSubmit, initialData }: AkademiFormProps) => {
+  const [formData, setFormData] = useState<AkademiData>(initialData || {
+    name: '',
     phone: '',
     email: '',
-    role: 'Atlet'
+    address: '',
+    logo: ''
   })
 
-  const resetForm = () => {
-    setFormData({
-      full_name: '',
-      phone: '',
-      email: '',
-      role: 'Atlet'
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    try {
-      await onSubmit(formData)
-      if (!initialData) {
-        resetForm() // Reset form untuk tambah anggota baru
-      }
-      onClose()
-    } catch (error) {
-      // error handling untuk form submission
-      console.error('Form submission error:', error)
-    }
+    onSubmit(formData)
+    onClose()
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -59,7 +44,7 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-red-900">
-            {initialData ? 'Edit Anggota' : 'Tambah Anggota Baru'}
+            {initialData ? 'Edit Akademi' : 'Tambah Akademi Baru'}
           </h2>
           <button
             onClick={onClose}
@@ -71,15 +56,16 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nama Lengkap
+              Nama Akademi
             </label>
             <input
               type="text"
-              name="full_name"
-              value={formData.full_name}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               required
+              placeholder="Masukkan nama akademi"
             />
           </div>
 
@@ -93,7 +79,7 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
               value={formData.email}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              required
+              placeholder="Masukkan email akademi"
             />
           </div>
 
@@ -107,22 +93,36 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
               value={formData.phone}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              placeholder="Masukkan nomor telepon"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Role
+              Alamat
             </label>
-            <select
-              name="role"
-              value={formData.role}
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              placeholder="Masukkan alamat lengkap akademi"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Logo URL (Opsional)
+            </label>
+            <input
+              type="url"
+              name="logo"
+              value={formData.logo}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            >
-              <option value="Atlet">Atlet</option>
-              <option value="Pelatih">Pelatih</option>
-            </select>
+              placeholder="https://example.com/logo.png"
+            />
           </div>
 
           <div className="flex gap-3 pt-4">
@@ -146,4 +146,4 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
   )
 }
 
-export default AnggotaForm
+export default AkademiForm

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
-import { getAcademies, createAcademy, NewAcademyInput } from '@/actions/academies'
+import { requireAdmin } from '@/src/actions/auth'
+import { getAcademies, createAcademy, NewAcademyInput } from '@/src/actions/academies'
 
 export async function GET() {
   try {

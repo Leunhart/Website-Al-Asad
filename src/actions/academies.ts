@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
-import type { Academy } from '@/types/database'
+import { supabase } from '@/src/lib/supabase'
+import type { Academy } from '@/src/types/database'
 
 export type NewAcademyInput = {
   name: string

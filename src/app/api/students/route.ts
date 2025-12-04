@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
+import { requireAdmin } from '@/src/actions/auth'
 import {
   getStudents,
   createStudent,
   NewStudentInput,
-} from '@/actions/students'
+} from '@/src/actions/students'
 
 // PUBLIC: list students
 export async function GET() {

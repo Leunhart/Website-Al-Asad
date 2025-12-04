@@ -25,7 +25,7 @@ const Anggota = () => {
         }
     }
 
-    const handleAddAnggota = async (data: any) => {
+    const handleAddAnggota = async (data: any): Promise<void> => {
         try {
             // Transform form data to match database schema
             const userData = {

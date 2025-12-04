@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
+import { requireAdmin } from '@/src/actions/auth'
 import {
   getAchievements,
   createAchievement,
   NewAchievementInput,
-} from '@/actions/achievements'
+} from '@/src/actions/achievements'
 
 // PUBLIC: list achievements
 export async function GET() {

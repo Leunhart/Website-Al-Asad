@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
+import { requireAdmin } from '@/src/actions/auth'
 import {
   getTestimonials,
   createTestimonial,
   NewTestimonialInput,
-} from '@/actions/testimonials'
+} from '@/src/actions/testimonials'
 
 // PUBLIC: list testimonials
 export async function GET() {

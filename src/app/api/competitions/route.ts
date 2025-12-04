@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
+import { requireAdmin } from '@/src/actions/auth'
 import {
   getCompetitions,
   createCompetition,
   NewCompetitionInput,
-} from '@/actions/competitions'
+} from '@/src/actions/competitions'
 
 // PUBLIC: list competitions
 export async function GET() {
