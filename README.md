@@ -151,26 +151,12 @@ panahan-app/
 └── ...
 ```
 
-## 🤝 Kontribusi
-
-Kontribusi sangat kami nantikan! Untuk berkontribusi:
-
-1. Fork repository ini
-2. Buat branch fitur (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buka Pull Request
-
 ## 📄 Lisensi
 
 Project ini dilisensikan di bawah lisensi MIT - lihat file [LICENSE](LICENSE) untuk detail lebih lanjut.
 
-## 📧 Kontak
-
-Project Link: [https://github.com/username/panahan-app](https://github.com/username/panahan-app)
-
 ---
 
 <p align="center">
-  Dibangun dengan ❤️ menggunakan Next.js dan Supabase
+❤️  Next.js dan Supabase
 </p>
