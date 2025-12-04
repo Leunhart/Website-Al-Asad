@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-  Sistem manajemen lengkap untuk akademi panahan dengan dashboard admin, manajemen siswa, pelatih, lomba, dan prestasi.
+  Web Profile Company dan sistem manajemen akademi panahan Al-Asad
 </p>
 
 <p align="center">
