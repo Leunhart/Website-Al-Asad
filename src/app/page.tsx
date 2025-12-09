@@ -1,6 +1,8 @@
+"use client";
 import Link from "next/link";
 
 export default function Home() {
+  redirect("/landing/pendaftaran");
   return (
     <>
     <h1>test Feature</h1>
@@ -17,4 +19,3 @@ export default function Home() {
     </>
 );
 }
- 
