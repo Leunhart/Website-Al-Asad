@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import Navbar from '@/components/landing/Navbar'
+import Navbar from '@/src/components/landing/Navbar'
 
 export default function LandingLayout({ children }: { children: ReactNode }) {
 	return (

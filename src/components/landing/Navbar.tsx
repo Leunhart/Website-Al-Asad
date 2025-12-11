@@ -18,6 +18,10 @@ export default function Navbar() {
     { href: '#competitions', label: 'Lomba' },
   ]
 
+  const authLinks = [
+    { href: '/auth/login', label: 'Login Admin' },
+  ]
+
   return (
     <header className="sticky top-0 z-50 bg-[#192F0E] shadow-lg border-b border-white/5">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -60,6 +64,12 @@ export default function Navbar() {
           </div>
         </nav>
         <div className="flex items-center gap-3">
+          <a
+            href="/auth/login"
+            className="hidden md:block text-sm font-medium text-[var(--green-text-primary)] hover:text-[#b9876c] transition-colors duration-300"
+          >
+            Login Admin
+          </a>
           <a
             href="/landing/pendaftaran"
             className="btn-primary px-5 py-2.5 text-sm font-bold hover:scale-[1.03]"
@@ -134,6 +144,14 @@ export default function Navbar() {
                 </div>
               )}
             </div>
+              {/* Login link for mobile */}
+              <a
+                href="/auth/login"
+                onClick={() => setIsOpen(false)}
+                className="py-2 text-[var(--green-text-primary)] hover:text-[#b9876c] transition-colors duration-300"
+              >
+                Login Admin
+              </a>
           </div>
         </nav>
       )}

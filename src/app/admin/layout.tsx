@@ -1,4 +1,4 @@
-import Sidebar from "@/src/components/admin/Sidebar";
+import ResponsiveSidebar from "@/src/components/admin/ResponsiveSidebar";
 import Navbar from "@/src/components/admin/Navbar";
 import Footer from "@/src/components/admin/Footer";
 
@@ -8,11 +8,11 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="ml-64 flex min-h-screen bg-white">
-      {/* Sidebar */}
-      <Sidebar />
+    <div className="flex min-h-screen bg-white">
+      {/* Responsive Sidebar */}
+      <ResponsiveSidebar />
 
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 md:ml-64">
         {/* Navbar */}
         <Navbar />
 

@@ -1,4 +1,6 @@
-import { getCompetitions } from '@/src/actions/competitions'
+'use client'
+
+import { useState } from 'react'
 import type { Competition } from '@/src/types/database'
 
 function formatRange(start: string | null, end: string | null) {
@@ -30,7 +32,7 @@ const accentColors = [
   'bg-[#2e3b34]', // dark card
 ]
 
-function CompetitionCard({ c, i }: { c: Competition; i: number }) {
+function CompetitionCardWithIndex({ c, i }: { c: Competition; i: number }) {
   const accent = accentColors[i % accentColors.length]
   return (
     <article className={`rounded-xl overflow-hidden border border-foreground/10 ${accent}`}>
@@ -66,20 +68,66 @@ function CompetitionCard({ c, i }: { c: Competition; i: number }) {
   )
 }
 
-export default async function Competitions() {
-  const list = await getCompetitions()
-  const items = list.slice(0, 6)
+export default function CompetitionsPagination({ competitions }: { competitions: Competition[] }) {
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 4
+
+  // Calculate pagination
+  const totalPages = Math.ceil(competitions.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const currentItems = competitions.slice(startIndex, startIndex + itemsPerPage)
+
+  const goToNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  const goToPrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1)
+    }
+  }
 
   return (
     <section id="competitions" className="px-6 max-w-6xl mx-auto w-full">
       <h2 className="text-center text-2xl md:text-3xl font-bold mb-8">Lomba & Kompetisi</h2>
-      <div className="grid gap-6 md:grid-cols-2">
-        {items.length === 0 ? (
-          <div className="opacity-70 text-sm">Belum ada data kompetisi.</div>
-        ) : (
-          items.map((c, i) => <CompetitionCard key={c.id_competitions} c={c} i={i} />)
-        )}
-      </div>
+
+      {competitions.length === 0 ? (
+        <div className="opacity-70 text-sm">Belum ada data kompetisi.</div>
+      ) : (
+        <>
+          <div className="grid gap-6 md:grid-cols-2">
+            {currentItems.map((c, i) => (
+              <CompetitionCardWithIndex key={c.id_competitions} c={c} i={i} />
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+              <button
+                onClick={goToPrev}
+                disabled={currentPage === 1}
+                className={`px-6 py-2 rounded-md border border-foreground/20 hover:bg-foreground hover:text-background text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                Sebelumnya
+              </button>
+
+              <span className="text-sm">
+                Halaman {currentPage} dari {totalPages}
+              </span>
+
+              <button
+                onClick={goToNext}
+                disabled={currentPage === totalPages}
+                className={`px-6 py-2 rounded-md border border-foreground/20 hover:bg-foreground hover:text-background text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                Selanjutnya
+              </button>
+            </div>
+          )}
+        </>
+      )}
     </section>
   )
 }

@@ -1,27 +1,28 @@
-import { getAchievements } from '@/actions/achievements'
-import { getCoaches } from '@/actions/coaches'
-import { getTestimonials } from '@/actions/testimonials'
-import Hero from '@/components/landing/Hero'
-import About from '@/components/landing/About'
-import Gallery from '@/components/landing/Gallery'
-import Programs from '@/components/landing/Programs'
-import Facilities from '@/components/landing/Facilities'
-import ContactSection from '@/components/landing/ContactSection'
-import Competitions from '@/components/landing/Competitions'
-import AchievementsPreview from '@/components/landing/AchievementsPreview'
-import CoachesPreview from '@/components/landing/CoachesPreview'
-import Testimonials from '@/components/landing/Testimonials'
-import CallToAction from '@/components/landing/CallToAction'
-import Footer from '@/components/landing/Footer'
+import { getAchievements } from '@/src/actions/achievements'
+import { getCoaches } from '@/src/actions/coaches'
+import { getTestimonials } from '@/src/actions/testimonials'
+import { getCompetitions } from '@/src/actions/competitions'
+import Hero from '@/src/components/landing/Hero'
+import About from '@/src/components/landing/About'
+import Gallery from '@/src/components/landing/Gallery'
+import Programs from '@/src/components/landing/Programs'
+import Facilities from '@/src/components/landing/Facilities'
+import ContactSection from '@/src/components/landing/ContactSection'
+import CompetitionsPagination from '@/src/components/landing/CompetitionsPagination'
+import AchievementsPagination from '@/src/components/landing/AchievementsPagination'
+import CoachesPreview from '@/src/components/landing/CoachesPreview'
+import Testimonials from '@/src/components/landing/Testimonials'
+import CallToAction from '@/src/components/landing/CallToAction'
+import Footer from '@/src/components/landing/Footer'
 
 export default async function LandingPage() {
-	const [achievements, coaches, testimonials] = await Promise.all([
+	const [achievements, coaches, testimonials, competitions] = await Promise.all([
 		getAchievements(),
 		getCoaches(),
 		getTestimonials(),
+		getCompetitions(),
 	])
 
-	const topAchievements = achievements.slice(0, 3)
 	const topCoaches = coaches.slice(0, 4)
 
 	return (
@@ -34,11 +35,9 @@ export default async function LandingPage() {
 			<Facilities />
 			<Gallery />
 			<Programs />
-			<Competitions />
-			<ContactSection />
+			<CompetitionsPagination competitions={competitions} />
 			<section id="prestasi" className="px-6 py-16 max-w-7xl mx-auto w-full">
-				<h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">Prestasi Terbaru</h2>
-				<AchievementsPreview achievements={topAchievements} />
+				<AchievementsPagination achievements={achievements} />
 			</section>
 			<section className="px-6 py-16 max-w-7xl mx-auto w-full">
 				<h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">Pelatih Kami</h2>
@@ -46,6 +45,7 @@ export default async function LandingPage() {
 			</section>
 			<Testimonials testimonials={testimonials} />
 			<CallToAction />
+			<ContactSection />
 			<Footer />
 		</main>
 	)

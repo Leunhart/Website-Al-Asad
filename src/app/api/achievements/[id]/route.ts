@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
-import { requireAdmin } from '@/actions/auth'
+import { requireAdmin } from '@/src/actions/auth'
 import {
   getAchievementById,
   updateAchievement,
   deleteAchievement,
   UpdateAchievementInput,
-} from '@/actions/achievements'
+} from '@/src/actions/achievements'
 
 type RouteContext = {
   params: Promise<{

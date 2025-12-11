@@ -1,4 +1,4 @@
-import type { Achievement } from '@/types/database'
+import type { Achievement } from '@/src/types/database'
 
 interface Props {
   achievements: Achievement[]

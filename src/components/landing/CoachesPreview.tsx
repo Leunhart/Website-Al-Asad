@@ -1,4 +1,4 @@
-import type { Coach } from '@/types/database'
+import type { Coach } from '@/src/types/database'
 
 interface Props {
   coaches: Coach[]

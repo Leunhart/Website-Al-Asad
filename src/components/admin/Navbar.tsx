@@ -1,34 +1,46 @@
-import { logout } from '../../actions/auth'
+// src/components/admin/Navbar.tsx
+'use client'
 
-const Navbar = () => {
+import Link from 'next/link'
+import { useRouter } from 'next/navigation' // Tambahkan import router
+import { User, LogOut } from 'lucide-react'
+
+export default function Navbar() {
+  const router = useRouter() // Tambahkan ini
+
+  const handleLogout = async () => {
+    try {
+      // Panggil API logout
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+      })
+      // Redirect ke halaman login
+      router.push('/auth/login')
+    } catch (err) {
+      console.error('Logout failed:', err)
+      // Fallback: hapus cookie manual jika API gagal
+      document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
+      router.push('/auth/login')
+    }
+  }
+
   return (
-    <nav className="bg-white border-b-2 border-red-900 text-gray-900 p-4 shadow-sm">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="bg-red-100 rounded-full p-2">
-            <span className="text-red-600 text-xl">🎯</span>
+    <nav className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
           </div>
-          <h1 className="text-xl font-semibold text-red-900">Admin Panel</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="text-right hidden md:block">
-            <p className="text-sm font-medium text-gray-700">Selamat datang,</p>
-            <p className="text-xs text-gray-500">Administrator</p>
-          </div>
-          <div className="bg-red-100 rounded-full p-2">
-            <span className="text-red-600 text-lg">👤</span>
-          </div>
-          <form action={logout}>
+          <div className="flex items-center gap-4">
             <button
-              type="submit"
-              className="bg-red-900 hover:bg-red-800 px-4 py-2 rounded-lg transition-colors duration-200 font-medium text-white"
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
             >
+              <LogOut size={16} />
               Logout
             </button>
-          </form>
+          </div>
         </div>
       </div>
     </nav>
   )
 }
-export default Navbar

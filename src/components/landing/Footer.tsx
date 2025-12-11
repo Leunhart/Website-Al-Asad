@@ -1,4 +1,13 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
 export default function Footer() {
+  const [currentYear, setCurrentYear] = useState<number | null>(null)
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear())
+  }, [])
   return (
     <footer id="contact" className="bg-[#2B2527] text-[#EEEAE4] mt-16">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -34,7 +43,7 @@ export default function Footer() {
         </div>
         <div className="text-sm text-center pt-8 border-t border-[#8C8F8E]/30 opacity-80">
           <p>
-            &copy; {new Date().getFullYear()} Al Asad Panahan Academy. Semua hak dilindungi.
+            &copy; {currentYear || 2024} Al Asad Panahan Academy. Semua hak dilindungi.
           </p>
         </div>
       </div>

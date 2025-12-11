@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, FormEvent } from 'react'
-import { registerStudent } from '@/actions/registration'
+import { registerStudent } from '@/src/actions/registration'
 
 interface RegistrationData {
   full_name: string

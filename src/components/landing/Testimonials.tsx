@@ -1,4 +1,4 @@
-import type { Testimonial } from '@/types/database'
+import type { Testimonial } from '@/src/types/database'
 
 interface TestimonialsProps {
   testimonials: Testimonial[]

@@ -1,6 +1,6 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/src/lib/supabase'
 
 interface RegistrationData {
   full_name: string

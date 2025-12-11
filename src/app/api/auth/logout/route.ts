@@ -1,13 +1,26 @@
-import { createClient } from '@/src/lib/supabase-server'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/src/lib/supabase-server'
 
 export async function POST() {
-  const supabase = await createClient()
-  const { error } = await supabase.auth.signOut()
+  try {
+    const supabase = await createClient()
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    // Clear auth cookie
+    const response = NextResponse.json({
+      success: true,
+      message: 'Logout successful'
+    })
+    response.cookies.delete('auth-token')
+
+    return response
+
+  } catch (err) {
+    console.error('Logout error:', err)
+    const response = NextResponse.json(
+      { success: false, error: 'Logout failed' },
+      { status: 500 }
+    )
+    response.cookies.delete('auth-token')
+    return response
   }
-
-  return NextResponse.json({ message: 'Logout successful' })
 }
