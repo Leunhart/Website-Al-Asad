@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Set auth cookie with user ID
+    // set auth-token cookie  
     const response = NextResponse.json({
       success: true,
       user: {
