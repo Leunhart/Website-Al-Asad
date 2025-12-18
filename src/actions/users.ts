@@ -9,6 +9,7 @@ export type NewUserInput = {
   phone?: string | null
   role: string
   id_coaches?: number | null
+  password?: string | null
 }
 
 export type UpdateUserInput = {
@@ -60,11 +61,15 @@ export async function getUserById(id: number): Promise<User | null> {
 
 export async function createUser(input: NewUserInput): Promise<{ success: boolean; error?: string; data?: User }> {
   try {
+    // Ensure password is always provided
+    const password = input.password || 'default_password123' // Stronger default password
+    
     const payload = {
       full_name: input.full_name,
       email: input.email,
       phone: input.phone ?? null,
       role: input.role,
+      password: password, // Always include password
       id_coaches: input.id_coaches ?? null,
     }
 
@@ -76,6 +81,7 @@ export async function createUser(input: NewUserInput): Promise<{ success: boolea
 
     if (error) {
       console.error('[createUser] error:', error)
+      console.error('[createUser] payload:', payload) // Debug payload
       return { success: false, error: error.message }
     }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface AnggotaFormProps {
   isOpen: boolean
@@ -13,36 +13,53 @@ interface AnggotaData {
   full_name: string
   phone: string
   email: string
-  role: 'Atlet' | 'Pelatih'
+  role: 'admin' | 'coach'
+  password?: string
 }
 
 const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProps) => {
-  const [formData, setFormData] = useState<AnggotaData>(initialData || {
+  const [formData, setFormData] = useState<AnggotaData>({
     full_name: '',
     phone: '',
     email: '',
-    role: 'Atlet'
+    role: 'admin',
+    password: ''
   })
 
-  const resetForm = () => {
-    setFormData({
-      full_name: '',
-      phone: '',
-      email: '',
-      role: 'Atlet'
-    })
-  }
+  // --- PERBAIKAN DI SINI ---
+  // Gunakan useEffect untuk sinkronisasi state ketika initialData atau isOpen berubah
+  useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        // Mode Edit: Isi form dengan data yang dikirim
+        setFormData({
+          full_name: initialData.full_name || '',
+          phone: initialData.phone || '',
+          email: initialData.email || '',
+          role: initialData.role || 'admin',
+          password: '' // Password dikosongkan untuk keamanan & input baru
+        })
+      } else {
+        // Mode Tambah: Reset form menjadi kosong
+        setFormData({
+          full_name: '',
+          phone: '',
+          email: '',
+          role: 'admin',
+          password: ''
+        })
+      }
+    }
+  }, [initialData, isOpen]) 
+  // -------------------------
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
       await onSubmit(formData)
-      if (!initialData) {
-        resetForm() // Reset form untuk tambah anggota baru
-      }
+      // Reset logic sudah ditangani oleh useEffect, jadi tidak perlu reset manual di sini
       onClose()
     } catch (error) {
-      // error handling untuk form submission
       console.error('Form submission error:', error)
     }
   }
@@ -54,6 +71,9 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
     }))
   }
 
+  // Jika tidak open, return null agar tidak merender apapun (opsional, tapi lebih bersih daripada class hidden)
+  // Tapi karena Anda pakai animasi/class hidden, kita biarkan return JSX seperti semula.
+  
   return (
     <div className={`fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 ${isOpen ? '' : 'hidden'}`}>
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
@@ -63,6 +83,7 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
           </h2>
           <button
             onClick={onClose}
+            type="button"
             className="text-gray-400 hover:text-gray-600 text-2xl"
           >
             ×
@@ -120,9 +141,24 @@ const AnggotaForm = ({ isOpen, onClose, onSubmit, initialData }: AnggotaFormProp
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             >
-              <option value="Atlet">Atlet</option>
-              <option value="Pelatih">Pelatih</option>
+              <option value="admin">Admin</option>
+              <option value="coach">Coach</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password {initialData && <span className="text-xs text-gray-500 font-normal">(Kosongkan jika tidak ingin mengubah)</span>}
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder={initialData ? "******" : ""}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              {...(!initialData && { required: true })} // Password wajib hanya saat tambah baru
+            />
           </div>
 
           <div className="flex gap-3 pt-4">

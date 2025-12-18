@@ -34,7 +34,7 @@ const Dashboard = () => {
 
     const loadDashboardData = async () => {
         try {
-            const [users, competitions, achievements, coaches, students, academies, testimonials, growthData, coachData, studentData] = await Promise.all([
+            const [users, competitions, achievements, coaches, studentsResult, academies, testimonials, growthData, coachData, studentData] = await Promise.all([
                 getUsers(),
                 getCompetitions(),
                 getAchievements(),
@@ -59,12 +59,15 @@ const Dashboard = () => {
                 console.error('Error fetching pending registrations:', error)
             }
 
+            // Count coaches from users with coach role
+            const totalCoaches = users.filter(user => user.role === 'coach').length
+
             setStats({
                 totalAnggota: users.length,
                 totalLomba: competitions.length,
-                totalKelas: coaches.length,
+                totalKelas: totalCoaches, // Use coach count from users table
                 totalPrestasi: achievements.length,
-                totalSiswa: students.length,
+                totalSiswa: studentsResult.data.length,
                 totalAkademi: academies.length,
                 pendingRegistrations: pendingCount,
                 totalTestimoni: testimonials.length
@@ -98,7 +101,7 @@ const Dashboard = () => {
             }))
 
             // Recent students
-            const recentStudents = students.slice(0, 1).map(student => ({
+            const recentStudents = studentsResult.data.slice(0, 1).map(student => ({
                 type: 'student',
                 title: 'Siswa Baru Bergabung',
                 description: student.full_name,
@@ -255,20 +258,28 @@ const Dashboard = () => {
                             }
 
                             // Menggabungkan data coach dan student berdasarkan bulan
-                            const chartData = coachGrowth.map((coachItem, index) => {
-                                const studentItem = studentGrowth[index] || { count: 0 }
-                                const [year, month] = coachItem.month.split('-')
+                            // Pastikan kedua array memiliki panjang yang sama
+                            const maxLength = Math.max(coachGrowth.length, studentGrowth.length)
+                            const chartData = []
+
+                            for (let i = 0; i < maxLength; i++) {
+                                const coachItem = coachGrowth[i] || { month: new Date().toISOString().slice(0, 7), count: 0 }
+                                const studentItem = studentGrowth[i] || { count: 0 }
+                                
+                                // Gunakan bulan dari coach data, atau bulan saat ini jika tidak ada
+                                const monthKey = coachItem.month || new Date().toISOString().slice(0, 7)
+                                const [year, month] = monthKey.split('-')
                                 const monthIndex = parseInt(month) - 1
                                 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
                                 const monthName = monthNames[monthIndex]
 
-                                return {
+                                chartData.push({
                                     month: monthName,
                                     coach: coachItem.count,
                                     student: studentItem.count,
-                                    fullMonth: coachItem.month
-                                }
-                            })
+                                    fullMonth: monthKey
+                                })
+                            }
 
                             return (
                                 <ResponsiveContainer width="100%" height="100%">
@@ -368,7 +379,7 @@ const Dashboard = () => {
                             <p className="text-lg font-bold text-purple-800">
                                 {coachGrowth.length > 0 && studentGrowth.length > 0
                                     ? coachGrowth.reduce((sum, item) => sum + item.count, 0) + studentGrowth.reduce((sum, item) => sum + item.count, 0)
-                                    : stats.totalAnggota + stats.totalSiswa
+                                    : stats.totalKelas + stats.totalSiswa
                                 }
                             </p>
                             <p className="text-xs text-purple-500">6 bulan</p>

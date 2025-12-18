@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import AnggotaForm from '@/src/components/forms/AnggotaForm'
-import { getUsers, createUser, updateUser } from '../../../actions/users'
+import { getUsers, createUser, updateUser, deleteUser } from '../../../actions/users'
 
 const Anggota = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
@@ -33,7 +33,7 @@ const Anggota = () => {
                 email: data.email,
                 phone: data.phone,
                 role: data.role,
-                id_coaches: null // Will be set if role is Pelatih
+                password: data.password || undefined // Pass password if provided, otherwise let backend use default
             }
 
             const result = await createUser(userData)
@@ -52,20 +52,25 @@ const Anggota = () => {
         try {
             if (!editingData?.unique_id) return
 
-            // Transform form data to match database schema
-            const userData = {
-                full_name: data.full_name,
-                email: data.email,
-                phone: data.phone,
-                role: data.role
-            }
+            // Only send fields that have actually changed (true PATCH behavior)
+            const userData: any = {}
+            if (data.full_name !== editingData.full_name) userData.full_name = data.full_name
+            if (data.email !== editingData.email) userData.email = data.email
+            if (data.phone !== editingData.phone) userData.phone = data.phone
+            if (data.role !== editingData.role) userData.role = data.role
 
-            const result = await updateUser(editingData.unique_id, userData)
-            if (result.success) {
-                await loadUsers() // Refresh the list
-                console.log('Anggota berhasil diperbarui')
+            // Only send update if there are actual changes
+            if (Object.keys(userData).length > 0) {
+                const result = await updateUser(editingData.unique_id, userData)
+                if (result.success) {
+                    await loadUsers() // Refresh the list
+                    console.log('Anggota berhasil diperbarui')
+                } else {
+                    console.error('Error updating anggota:', result.error)
+                }
             } else {
-                console.error('Error updating anggota:', result.error)
+                console.log('Tidak ada perubahan data')
+                setIsFormOpen(false) // Close form if no changes
             }
         } catch (error) {
             console.error('Error updating anggota:', error)
@@ -78,8 +83,28 @@ const Anggota = () => {
     }
 
     const openEditForm = (anggotaData: any) => {
-        setEditingData(anggotaData)
+        // Include all fields including empty password for edit form
+        setEditingData({
+            ...anggotaData,
+            password: '' // Don't show existing password, but include field
+        })
         setIsFormOpen(true)
+    }
+
+    const handleDeleteAnggota = async (userId: number) => {
+        try {
+            if (confirm('Apakah Anda yakin ingin menghapus anggota ini?')) {
+                const success = await deleteUser(userId)
+                if (success) {
+                    await loadUsers() // Refresh the list
+                    console.log('Anggota berhasil dihapus')
+                } else {
+                    console.error('Gagal menghapus anggota')
+                }
+            }
+        } catch (error) {
+            console.error('Error deleting anggota:', error)
+        }
     }
 
     return (
@@ -127,7 +152,7 @@ const Anggota = () => {
                         <div className="p-4">
                             <div className="flex justify-between items-center mb-3">
                                 <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                                    user.role === 'Atlet'
+                                    user.role === 'admin'
                                         ? 'bg-green-50 text-green-700 border-green-200'
                                         : 'bg-purple-50 text-purple-700 border-purple-200'
                                 }`}>
@@ -140,18 +165,16 @@ const Anggota = () => {
                             {user.phone && <p className="text-gray-600 text-sm mb-4">Telp: {user.phone}</p>}
                             <div className="flex gap-2">
                                 <button
-                                    onClick={() => openEditForm({
-                                        full_name: user.full_name,
-                                        email: user.email,
-                                        phone: user.phone || '',
-                                        role: user.role
-                                    })}
-                                    className="flex-1 px-3 py-2 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
+                                   onClick={() => openEditForm(user)}
+                                   className="flex-1 px-3 py-2 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
+                               >
+                                   Edit
+                               </button>
+                                <button
+                                   onClick={() => handleDeleteAnggota(user.unique_id)}
+                                   className="flex-1 px-3 py-2 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200"
                                 >
-                                    Edit
-                                </button>
-                                <button className="flex-1 px-3 py-2 text-xs bg-red-50 text-red-700 rounded hover:bg-red-100 transition border border-red-200">
-                                    Hapus
+                                   Hapus
                                 </button>
                             </div>
                         </div>

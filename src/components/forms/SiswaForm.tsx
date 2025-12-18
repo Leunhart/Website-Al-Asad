@@ -27,7 +27,8 @@ interface Academy {
 }
 
 const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) => {
-  const [formData, setFormData] = useState<SiswaData>(initialData || {
+  // 1. Inisialisasi state dengan nilai default kosong
+  const [formData, setFormData] = useState<SiswaData>({
     full_name: '',
     gender: 'pria',
     date_of_birth: '',
@@ -40,6 +41,7 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
 
   const [academies, setAcademies] = useState<Academy[]>([])
 
+  // Load academies data
   useEffect(() => {
     const loadAcademies = async () => {
       try {
@@ -52,29 +54,53 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
     loadAcademies()
   }, [])
 
-  const resetForm = () => {
-    setFormData({
-      full_name: '',
-      gender: 'pria',
-      date_of_birth: '',
-      level: '',
-      achivements: '',
-      address: '',
-      status: 'active',
-      id_academies: 1
-    })
-  }
+  // --- PERBAIKAN UTAMA DI SINI ---
+  // Gunakan useEffect untuk mendeteksi perubahan initialData saat tombol edit diklik
+  useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        // Helper untuk format tanggal dari ISO string (jika dari DB) ke YYYY-MM-DD
+        const formatDate = (dateString: string) => {
+          if (!dateString) return '';
+          // Ambil bagian tanggal saja jika formatnya "2023-01-01T00:00:00.000Z"
+          return dateString.split('T')[0];
+        };
+
+        // Mode Edit: Isi form dengan data
+        setFormData({
+          full_name: initialData.full_name || '',
+          gender: initialData.gender || 'pria',
+          date_of_birth: formatDate(initialData.date_of_birth),
+          level: initialData.level || '',
+          achivements: initialData.achivements || '',
+          address: initialData.address || '',
+          status: initialData.status || 'active',
+          id_academies: initialData.id_academies || 1
+        })
+      } else {
+        // Mode Tambah: Reset form ke default
+        setFormData({
+          full_name: '',
+          gender: 'pria',
+          date_of_birth: '',
+          level: '',
+          achivements: '',
+          address: '',
+          status: 'active',
+          id_academies: 1
+        })
+      }
+    }
+  }, [initialData, isOpen])
+  // -------------------------------
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
       await onSubmit(formData)
-      if (!initialData) {
-        resetForm() // reset form untuk tambah siswa baru
-      }
+      // Reset manual dihapus karena sudah ditangani useEffect
       onClose()
     } catch (error) {
-      // Error handling is done in the parent component
       console.error('Form submission error:', error)
     }
   }
@@ -95,6 +121,7 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
             {initialData ? 'Edit Siswa' : 'Tambah Siswa Baru'}
           </h2>
           <button
+            type="button"
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-2xl"
           >
@@ -158,8 +185,7 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
               <option value="">Pilih Level</option>
               <option value="pemula">Pemula</option>
               <option value="menengah">Menengah</option>
-              <option value="lanjutan">Lanjutan</option>
-              <option value="profesional">Profesional</option>
+              <option value="lanjut">Lanjut</option>
             </select>
           </div>
 
@@ -248,4 +274,3 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
 }
 
 export default SiswaForm
-
