@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createServerClient } from '@supabase/ssr' // Import directly from the SDK
+import { createEdgeClient } from './lib/supabase-edge'
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-token')?.value
@@ -8,23 +8,7 @@ export async function middleware(request: NextRequest) {
 
   // 1. inisialisasi klien supabase untuk middleware
   // agar menhindari duplikasi kode, kita buat klien supabase langsung di middleware
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          // Middleware needs to handle setting cookies on the response manually
-          // But for your simple READ query below, this empty handler is often sufficient
-          // unless you are refreshing auth sessions (which your code doesn't seem to do here)
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-        },
-      },
-    }
-  )
+  const supabase = await createEdgeClient(request)
 
   // Protect admin routes
   if (pathname.startsWith('/admin')) {
