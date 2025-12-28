@@ -267,7 +267,14 @@ export default function RapotPage() {
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Input Skor</h2>
         <p className="text-sm text-gray-500 mb-6">
-          {studentLevel ? getLevelConfig(studentLevel).description : 'Memuat konfigurasi...'}
+          {studentLevel ?
+            getLevelConfig(studentLevel).description.replace(
+              /(sd|smp|sma)/g,
+              (match) => match.toUpperCase()
+            ).replace(
+              /umum/g,
+              (match) => 'Umum'
+            ) : 'Memuat konfigurasi...'}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -311,31 +318,31 @@ export default function RapotPage() {
             <table className="min-w-full border border-gray-200 text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-3 py-2 text-left text-gray-600">Ronde</th>
+                  <th className="px-3 py-2 text-left text-gray-600 w-24">Ronde</th>
                   {studentLevel && Array.from({ length: getLevelConfig(studentLevel).arrowsPerRound }, (_, i) => (
-                    <th key={i} className="px-3 py-2 text-center text-gray-600">
+                    <th key={i} className="px-2 py-2 text-center text-gray-600 w-20">
                       Panah {i + 1}
                     </th>
                   ))}
-                  <th className="px-3 py-2 text-right text-gray-600">Total</th>
+                  <th className="px-3 py-2 text-right text-gray-600 w-24">Total</th>
                 </tr>
               </thead>
               <tbody>
                 {scores.map((round, rIdx) => (
                   <tr key={rIdx} className="border-t border-gray-200">
-                    <td className="px-3 py-2 font-medium text-gray-700">Ronde {rIdx + 1}</td>
+                    <td className="px-3 py-2 font-medium text-gray-700 w-24">Ronde {rIdx + 1}</td>
                     {round.map((score, aIdx) => (
-                      <td key={aIdx} className="px-2 py-2">
+                      <td key={aIdx} className="px-2 py-2 w-20">
                         <input
                           type="number"
                           min={0}
                           value={score}
                           onChange={(event) => updateScore(rIdx, aIdx, event.target.value)}
-                          className="w-16 rounded-md border border-gray-300 px-2 py-1 text-center focus:outline-none focus:ring-2 focus:ring-red-500"
+                          className="w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:outline-none focus:ring-2 focus:ring-red-500"
                         />
                       </td>
                     ))}
-                    <td className="px-3 py-2 text-right font-semibold text-gray-800">
+                    <td className="px-3 py-2 text-right font-semibold text-gray-800 w-24">
                       {roundTotals[rIdx]}
                     </td>
                   </tr>
@@ -343,10 +350,10 @@ export default function RapotPage() {
               </tbody>
               <tfoot>
                 <tr className="border-t border-gray-200 bg-gray-50">
-                  <td colSpan={studentLevel ? getLevelConfig(studentLevel).arrowsPerRound + 2 : 7} className="px-3 py-2 text-right font-semibold text-gray-700">
+                  <td colSpan={studentLevel ? getLevelConfig(studentLevel).arrowsPerRound + 1 : 7} className="px-3 py-2 text-right font-semibold text-gray-700">
                     Total Semua Ronde
                   </td>
-                  <td className="px-3 py-2 text-right font-bold text-red-900">{totalScore}</td>
+                  <td className="px-3 py-2 text-right font-bold text-red-900 w-24">{totalScore}</td>
                 </tr>
               </tfoot>
             </table>
