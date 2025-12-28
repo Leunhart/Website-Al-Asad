@@ -14,6 +14,7 @@ import CoachesPreview from '@/src/components/landing/CoachesPreview'
 import Testimonials from '@/src/components/landing/Testimonials'
 import CallToAction from '@/src/components/landing/CallToAction'
 import Footer from '@/src/components/landing/Footer'
+import LiveScores from '@/src/components/landing/LiveScores'
 
 export default async function LandingPage() {
 	const [achievements, coaches, testimonials, competitions] = await Promise.all([
@@ -36,6 +37,12 @@ export default async function LandingPage() {
 			<Gallery />
 			<Programs />
 			<CompetitionsPagination competitions={competitions} />
+			
+			{/* Live Scores Section - positioned prominently */}
+			<section id="live-scores" className="px-6 py-16 max-w-7xl mx-auto w-full">
+				<LiveScores />
+			</section>
+			
 			<section id="prestasi" className="px-6 py-16 max-w-7xl mx-auto w-full">
 				<AchievementsPagination achievements={achievements} />
 			</section>

@@ -40,6 +40,29 @@ export async function getCompetitions(): Promise<Competition[]> {
   }
 }
 
+export async function getActiveCompetitionsWithLiveScores(): Promise<Competition[]> {
+  try {
+    const now = new Date().toISOString()
+    
+    const { data, error } = await supabase
+      .from('competitions')
+      .select('*')
+      .lte('start_date', now)
+      .gte('end_date', now)
+      .order('start_date', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching active competitions:', error)
+      return []
+    }
+
+    return data as Competition[]
+  } catch (error) {
+    console.error('Unexpected error fetching active competitions:', error)
+    return []
+  }
+}
+
 export async function getCompetitionById(id: number): Promise<Competition | null> {
   try {
     const { data, error } = await supabase

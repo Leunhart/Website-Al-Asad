@@ -3,7 +3,7 @@ import { User, Trophy, LayoutDashboard, Wrench, Calendar, Award, Building, Gradu
 
 const Sidebar = () => {
   return (
-    <div className="fixed top-0 left-0 h-full w-64 bg-white text-gray-800 p-6 shadow-sm border-r-2 border-red-900 overflow-y-auto">
+    <div className="fixed top-0 left-0 h-full w-64 bg-white text-gray-800 p-6 shadow-sm border-r-2 border-red-900 overflow-y-auto live-scoring-enabled">
       <h2 className="text-xl font-semibold mb-8 text-red-900 border-b border-red-200 pb-2">Admin Panel</h2>
       <nav className="space-y-2">
         <Link href="/admin/dashboard" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
@@ -14,6 +14,9 @@ const Sidebar = () => {
         </Link>
         <Link href="/admin/lomba" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
           <span className="mr-3 text-gray-500"><Trophy size={18}/></span> <span className="font-medium text-gray-700">Lomba</span>
+        </Link>
+        <Link href="/admin/live-scoring" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+          <span className="mr-3 text-gray-500"><Trophy size={18}/></span> <span className="font-medium text-gray-700">Live Scoring</span>
         </Link>
         <Link href="/admin/peralatan" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
           <span className="mr-3 text-gray-500"><Wrench size={18}/></span> <span className="font-medium text-gray-700">Peralatan</span>

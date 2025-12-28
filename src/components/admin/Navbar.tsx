@@ -3,7 +3,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation' // Tambahkan import router
-import { User, LogOut } from 'lucide-react'
+import { User, LogOut, Home } from 'lucide-react'
 
 export default function Navbar() {
   const router = useRouter() // Tambahkan ini
@@ -31,6 +31,13 @@ export default function Navbar() {
           <div className="flex items-center">
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              href="/landing"
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              <Home size={16} />
+              Kembali ke Beranda
+            </Link>
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"

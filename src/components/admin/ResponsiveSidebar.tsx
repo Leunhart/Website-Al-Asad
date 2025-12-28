@@ -16,13 +16,15 @@ export default function ResponsiveSidebar() {
     { href: "/admin/dashboard", icon: LayoutDashboard, text: "Dashboard" },
     { href: "/admin/anggota", icon: User, text: "Anggota" },
     { href: "/admin/lomba", icon: Trophy, text: "Lomba" },
+    { href: "/admin/live-scoring", icon: CheckCircle, text: "Live Scoring" },
     { href: "/admin/peralatan", icon: Wrench, text: "Peralatan" },
     { href: "/admin/jadwal", icon: Calendar, text: "Jadwal Latihan" },
     { href: "/admin/prestasi", icon: Award, text: "Prestasi" },
     { href: "/admin/akademi", icon: Building, text: "Akademi" },
     { href: "/admin/siswa", icon: GraduationCap, text: "Siswa" },
     { href: "/admin/testimoni", icon: MessageSquare, text: "Testimoni" },
-    { href: "/admin/registrasi", icon: CheckCircle, text: "Registrasi" },
+    { href: "/admin/registrasi", icon: CheckCircle, text: "Registrasi" }
+
   ]
 
   return (

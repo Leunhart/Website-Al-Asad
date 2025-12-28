@@ -25,7 +25,9 @@ const Registrasi = () => {
 
     const loadRegistrations = async () => {
         try {
-            const response = await fetch('/api/admin/registrations')
+            const response = await fetch('/api/admin/registrations', {
+                credentials: 'include',
+            })
             const data = await response.json()
 
             if (data.ok) {

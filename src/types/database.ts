@@ -36,6 +36,17 @@ export interface Competition {
   id_academies: number | null;
 }
 
+export interface LiveScore {
+  id_live_scores: number;
+  competition_id: number;
+  athlete_name: string;
+  score: number;
+  round: string;
+  notes: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
 export interface Equipment {
   id_equipment: number;
   name: string;

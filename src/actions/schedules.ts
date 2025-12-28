@@ -3,6 +3,16 @@
 import { supabase } from '../lib/supabase'
 import { Schedule } from '../types/database'
 
+export type ScheduleRequestInput = {
+  student_name: string;
+  email: string;
+  phone: string;
+  preferred_day: string;
+  preferred_time: string;
+  coach_id: string;
+  notes?: string;
+}
+
 export type NewScheduleInput = {
   title: string
   day: string
@@ -152,5 +162,41 @@ export async function deleteSchedule(id: number): Promise<boolean> {
   } catch (error) {
     console.error('[deleteSchedule] unexpected error:', error)
     return false
+  }
+}
+
+export async function requestSchedule(data: ScheduleRequestInput) {
+  try {
+    // Validate required fields
+    if (!data.student_name || !data.email || !data.phone || !data.preferred_day || !data.preferred_time || !data.coach_id) {
+      return { success: false, error: 'Semua field wajib harus diisi' }
+    }
+
+    // Insert into schedule_requests table
+    const { error } = await supabase
+      .from('schedule_requests')
+      .insert([
+        {
+          student_name: data.student_name,
+          email: data.email,
+          phone: data.phone,
+          preferred_day: data.preferred_day,
+          preferred_time: data.preferred_time,
+          coach_id: data.coach_id,
+          notes: data.notes || null,
+          status: 'pending',
+          created_at: new Date().toISOString(),
+        },
+      ])
+
+    if (error) {
+      console.error('Error requesting schedule:', error)
+      return { success: false, error: 'Gagal mengirim permintaan jadwal. Silakan coba lagi.' }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error('Unexpected error during schedule request:', error)
+    return { success: false, error: 'Terjadi kesalahan sistem' }
   }
 }

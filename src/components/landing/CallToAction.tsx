@@ -7,12 +7,20 @@ export default function CallToAction() {
         </h2>
         <h3 className="text-2xl md:text-3xl font-bold text-[#EEEAE4] mb-4">Siap Bergabung?</h3>
         <p className="text-[#EEEAE4]/85 mb-6">Daftar sekarang dan mulai perjalanan panahanmu bersama Al-Asad.</p>
-        <a
-          href="/landing/pendaftaran"
-          className="inline-block px-8 py-3 rounded-xl bg-[#7A2F36] text-[#EEEAE4] font-bold hover:bg-[#4B1E24] border border-[#C7A04F] transition-all duration-300 shadow-[0_12px_40px_rgba(0,0,0,0.22)]"
-        >
-          Daftar Sekarang
-        </a>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="/landing/pendaftaran"
+            className="inline-block px-8 py-3 rounded-xl bg-[#7A2F36] text-[#EEEAE4] font-bold hover:bg-[#4B1E24] border border-[#C7A04F] transition-all duration-300 shadow-[0_12px_40px_rgba(0,0,0,0.22)]"
+          >
+            Daftar Sekarang
+          </a>
+          <a
+            href="/landing/jadwal-latihan"
+            className="inline-block px-8 py-3 rounded-xl bg-[#4B1E24] text-[#EEEAE4] font-bold hover:bg-[#7A2F36] border border-[#C7A04F] transition-all duration-300 shadow-[0_12px_40px_rgba(0,0,0,0.22)]"
+          >
+            Permintaan Jadwal
+          </a>
+        </div>
       </div>
     </section>
   )
