@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import SiswaForm from '../../../components/forms/SiswaForm'
 import { getStudents, createStudent, updateStudent, deleteStudent } from '../../../actions/students'
@@ -167,6 +168,12 @@ const Siswa = () => {
                                 {student.address && <p className="text-gray-600 text-sm">📍 {student.address}</p>}
                             </div>
                             <div className="flex gap-2">
+                                <Link
+                                    href={`/admin/siswa/${student.id_students}/rapot`}
+                                    className="flex-1 px-3 py-2 text-xs bg-white text-gray-700 rounded hover:bg-gray-50 transition border border-gray-300 text-center"
+                                >
+                                    Rapot
+                                </Link>
                                 <button
                                     onClick={() => openEditForm(student)}
                                     className="flex-1 px-3 py-2 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
