@@ -20,7 +20,7 @@ export default function ResponsiveSidebar() {
     { href: "/admin/jadwal", icon: Calendar, text: "Jadwal Latihan" },
     { href: "/admin/prestasi", icon: Award, text: "Prestasi" },
     { href: "/admin/akademi", icon: Building, text: "Akademi" },
-    { href: "/admin/siswa", icon: GraduationCap, text: "Siswa" },
+    { href: "/admin/siswa", icon: GraduationCap, text: "Pelajar" },
     { href: "/admin/testimoni", icon: MessageSquare, text: "Testimoni" },
     { href: "/admin/registrasi", icon: CheckCircle, text: "Registrasi" },
   ]

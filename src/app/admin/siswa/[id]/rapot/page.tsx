@@ -32,6 +32,36 @@ type GraphPoint = {
 
 const emptyScores = Array.from({ length: 5 }, () => Array.from({ length: 6 }, () => 0))
 
+// Level-specific scoring configurations
+const getLevelConfig = (level: string | null) => {
+  switch (level?.toLowerCase()) {
+    case 'sd':
+      return {
+        rounds: 3,
+        arrowsPerRound: 4,
+        description: '3 ronde, masing-masing 4 panah (SD)',
+      }
+    case 'smp':
+      return {
+        rounds: 4,
+        arrowsPerRound: 5,
+        description: '4 ronde, masing-masing 5 panah (SMP)',
+      }
+    case 'sma':
+      return {
+        rounds: 5,
+        arrowsPerRound: 6,
+        description: '5 ronde, masing-masing 6 panah (SMA)',
+      }
+    default: // umum
+      return {
+        rounds: 5,
+        arrowsPerRound: 6,
+        description: '5 ronde, masing-masing 6 panah (Umum)',
+      }
+  }
+}
+
 export default function RapotPage() {
   const params = useParams<{ id: string }>()
   const studentId = Number(params?.id)
@@ -45,6 +75,7 @@ export default function RapotPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [studentLevel, setStudentLevel] = useState<string | null>(null)
 
   const roundTotals = useMemo(
     () => scores.map((round) => round.reduce((sum, score) => sum + score, 0)),
@@ -59,16 +90,26 @@ export default function RapotPage() {
     if (!Number.isInteger(studentId)) return
     setLoading(true)
     try {
-      const [historyRes, graphRes] = await Promise.all([
+      const [historyRes, graphRes, studentRes] = await Promise.all([
         fetch(`/api/rapot/${studentId}/history`),
         fetch(`/api/rapot/${studentId}/graph`),
+        fetch(`/api/students/${studentId}`),
       ])
 
       const historyJson = await historyRes.json()
       const graphJson = await graphRes.json()
+      const studentJson = await studentRes.json()
 
       setHistory(historyJson?.data ?? [])
       setGraph(graphJson?.data ?? [])
+      setStudentLevel(studentJson?.data?.level ?? null)
+
+      // Initialize scores based on student level
+      const levelConfig = getLevelConfig(studentJson?.data?.level ?? null)
+      const initialScores = Array.from({ length: levelConfig.rounds }, () =>
+        Array.from({ length: levelConfig.arrowsPerRound }, () => 0)
+      )
+      setScores(initialScores.map((row) => [...row]))
     } catch (loadError) {
       console.error('Error loading rapot data:', loadError)
       setError('Gagal memuat data rapot.')
@@ -84,6 +125,11 @@ export default function RapotPage() {
   const updateScore = (roundIndex: number, arrowIndex: number, value: string) => {
     const parsed = value === '' ? 0 : Number(value)
     if (!Number.isInteger(parsed) || parsed < 0) return
+    
+    // Get current level config to validate indices
+    const levelConfig = getLevelConfig(studentLevel)
+    if (roundIndex >= levelConfig.rounds || arrowIndex >= levelConfig.arrowsPerRound) return
+    
     setScores((prev) =>
       prev.map((round, rIdx) =>
         rIdx === roundIndex
@@ -204,12 +250,14 @@ export default function RapotPage() {
             </div>
             <div className="rounded-lg border border-gray-200 p-4">
               <p className="text-xs uppercase tracking-wide text-gray-500">Jumlah Panah</p>
-              <p className="text-xl font-semibold text-gray-800">30</p>
+              <p className="text-xl font-semibold text-gray-800">
+                {studentLevel ? getLevelConfig(studentLevel).rounds * getLevelConfig(studentLevel).arrowsPerRound : '...'}
+              </p>
             </div>
             <div className="rounded-lg border border-gray-200 p-4">
               <p className="text-xs uppercase tracking-wide text-gray-500">Rata-rata per Panah</p>
               <p className="text-xl font-semibold text-gray-800">
-                {(totalScore / 30).toFixed(2)}
+                {studentLevel ? (totalScore / (getLevelConfig(studentLevel).rounds * getLevelConfig(studentLevel).arrowsPerRound)).toFixed(2) : '0.00'}
               </p>
             </div>
           </div>
@@ -218,7 +266,9 @@ export default function RapotPage() {
 
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">Input Skor</h2>
-        <p className="text-sm text-gray-500 mb-6">5 ronde, masing-masing 6 panah.</p>
+        <p className="text-sm text-gray-500 mb-6">
+          {studentLevel ? getLevelConfig(studentLevel).description : 'Memuat konfigurasi...'}
+        </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -262,7 +312,7 @@ export default function RapotPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-3 py-2 text-left text-gray-600">Ronde</th>
-                  {Array.from({ length: 6 }, (_, i) => (
+                  {studentLevel && Array.from({ length: getLevelConfig(studentLevel).arrowsPerRound }, (_, i) => (
                     <th key={i} className="px-3 py-2 text-center text-gray-600">
                       Panah {i + 1}
                     </th>
@@ -293,7 +343,7 @@ export default function RapotPage() {
               </tbody>
               <tfoot>
                 <tr className="border-t border-gray-200 bg-gray-50">
-                  <td colSpan={7} className="px-3 py-2 text-right font-semibold text-gray-700">
+                  <td colSpan={studentLevel ? getLevelConfig(studentLevel).arrowsPerRound + 2 : 7} className="px-3 py-2 text-right font-semibold text-gray-700">
                     Total Semua Ronde
                   </td>
                   <td className="px-3 py-2 text-right font-bold text-red-900">{totalScore}</td>

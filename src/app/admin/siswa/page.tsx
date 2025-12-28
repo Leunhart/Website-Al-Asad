@@ -114,15 +114,15 @@ const Siswa = () => {
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Manajemen Siswa</h1>
-                    <p className="text-gray-600 mt-1">Kelola data siswa akademi panahan</p>
+                    <h1 className="text-3xl font-bold text-gray-900">Manajemen Pelajar</h1>
+                    <p className="text-gray-600 mt-1">Kelola data pelajar akademi panahan</p>
                 </div>
                 <button
                     onClick={openAddForm}
                     className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
                 >
                     <span className="text-lg">+</span>
-                    Tambah Siswa
+                    Tambah Pelajar
                 </button>
             </div>
 
@@ -192,8 +192,8 @@ const Siswa = () => {
                 )) : (
                     <div className="col-span-full bg-gray-50 rounded-xl p-8 text-center">
                         <div className="text-6xl mb-4">👨‍🎓</div>
-                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Belum ada siswa</h3>
-                        <p className="text-gray-500">Tambahkan siswa pertama untuk memulai</p>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Belum ada pelajar</h3>
+                        <p className="text-gray-500">Tambahkan pelajar pertama untuk memulai</p>
                     </div>
                 )}
             </div>
