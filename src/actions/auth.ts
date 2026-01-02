@@ -3,6 +3,7 @@
 import { createClient } from '../lib/supabase-server'
 import { supabase } from '../lib/supabase'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 export async function login(formData: FormData) {
   const email = formData.get('email') as string
@@ -51,15 +52,16 @@ export async function getCurrentUser() {
 
 // 2. Get profile from your "users" table
 export async function getCurrentProfile() {
-  const user = await getCurrentUser()
-  if (!user) return null
+  const cookieStore = await cookies()
+  const token = cookieStore.get('auth-token')?.value
+  if (!token) return null
 
   const supabase = await createClient()
 
   const { data, error } = await supabase
-    .from('users')      
+    .from('users')
     .select('*')
-    .eq('email', user.email)
+    .eq('unique_id', token)
     .single()
 
   if (error) {

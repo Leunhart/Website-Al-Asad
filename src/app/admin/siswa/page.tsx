@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import SiswaForm from '../../../components/forms/SiswaForm'
 import { getStudents, createStudent, updateStudent, deleteStudent } from '../../../actions/students'
 
@@ -190,15 +191,15 @@ const Siswa = () => {
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Manajemen Siswa</h1>
-                    <p className="text-gray-600 mt-1">Kelola data siswa akademi panahan</p>
+                    <h1 className="text-3xl font-bold text-gray-900">Manajemen Pelajar</h1>
+                    <p className="text-gray-600 mt-1">Kelola data pelajar akademi panahan</p>
                 </div>
                 <button
                     onClick={openAddForm}
                     className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
                 >
                     <span className="text-lg">+</span>
-                    Tambah Siswa
+                    Tambah Pelajar
                 </button>
             </div>
 
@@ -311,6 +312,12 @@ const Siswa = () => {
                                 {student.address && <p className="text-gray-600 text-sm">📍 {student.address}</p>}
                             </div>
                             <div className="flex gap-2">
+                                <Link
+                                    href={`/admin/siswa/${student.id_students}/rapot`}
+                                    className="flex-1 px-3 py-2 text-xs bg-white text-gray-700 rounded hover:bg-gray-50 transition border border-gray-300 text-center"
+                                >
+                                    Rapot
+                                </Link>
                                 <button
                                     onClick={() => openEditForm(student)}
                                     className="flex-1 px-3 py-2 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition border border-gray-300"
@@ -329,8 +336,8 @@ const Siswa = () => {
                 )) : (
                     <div className="col-span-full bg-gray-50 rounded-xl p-8 text-center">
                         <div className="text-6xl mb-4">👨‍🎓</div>
-                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Belum ada siswa</h3>
-                        <p className="text-gray-500">Tambahkan siswa pertama untuk memulai</p>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Belum ada pelajar</h3>
+                        <p className="text-gray-500">Tambahkan pelajar pertama untuk memulai</p>
                     </div>
                 )}
             </div>

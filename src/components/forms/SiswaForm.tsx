@@ -183,9 +183,10 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             >
               <option value="">Pilih Level</option>
-              <option value="pemula">Pemula</option>
-              <option value="menengah">Menengah</option>
-              <option value="lanjut">Lanjut</option>
+              <option value="SD">Sekolah Dasar</option>
+              <option value="SMP">Sekolah Menengah Pertama</option>
+              <option value="SMA">Sekolah Menengah Atas</option>
+              <option value="Umum">Umum</option>
             </select>
           </div>
 
