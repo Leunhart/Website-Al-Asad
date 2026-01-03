@@ -15,6 +15,7 @@ interface SiswaData {
   gender: 'pria' | 'wanita'
   date_of_birth: string
   level: string
+  asal_sekolah: string
   achivements: string
   address: string
   status: 'active' | 'inactive'
@@ -33,6 +34,7 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
     gender: 'pria',
     date_of_birth: '',
     level: '',
+    asal_sekolah: '',
     achivements: '',
     address: '',
     status: 'active',
@@ -72,6 +74,7 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
           gender: initialData.gender || 'pria',
           date_of_birth: formatDate(initialData.date_of_birth),
           level: initialData.level || '',
+          asal_sekolah: initialData.asal_sekolah || '',
           achivements: initialData.achivements || '',
           address: initialData.address || '',
           status: initialData.status || 'active',
@@ -84,6 +87,7 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
           gender: 'pria',
           date_of_birth: '',
           level: '',
+          asal_sekolah: '',
           achivements: '',
           address: '',
           status: 'active',
@@ -174,7 +178,7 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Level/Tingkat
+              Kategori
             </label>
             <select
               name="level"
@@ -182,12 +186,26 @@ const SiswaForm = ({ isOpen, onClose, onSubmit, initialData }: SiswaFormProps) =
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             >
-              <option value="">Pilih Level</option>
+              <option value="">Pilih Kategori</option>
               <option value="SD">Sekolah Dasar</option>
               <option value="SMP">Sekolah Menengah Pertama</option>
               <option value="SMA">Sekolah Menengah Atas</option>
               <option value="Umum">Umum</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Asal Sekolah
+            </label>
+            <input
+              type="text"
+              name="asal_sekolah"
+              value={formData.asal_sekolah}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              placeholder="Masukkan asal sekolah"
+            />
           </div>
 
           <div>

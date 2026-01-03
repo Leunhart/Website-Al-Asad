@@ -9,6 +9,7 @@ export type NewStudentInput = {
   gender?: string | null
   date_of_birth?: string | null
   level?: string | null
+  asal_sekolah?: string | null
   achivements?: string | null
   address?: string | null
   status?: string | null 
@@ -20,6 +21,7 @@ export type UpdateStudentInput = {
   gender?: string | null
   date_of_birth?: string | null
   level?: string | null
+  asal_sekolah?: string | null
   achivements?: string | null
   address?: string | null
   status?: string | null
@@ -121,6 +123,7 @@ export async function createStudent(input: NewStudentInput): Promise<Student | n
       gender: input.gender ?? null,
       date_of_birth: input.date_of_birth ?? null,
       level: input.level ?? null,
+      asal_sekolah: input.asal_sekolah ?? null,
       achivements: input.achivements ?? null,
       address: input.address ?? null,
       status: input.status ?? null,
@@ -170,6 +173,7 @@ export async function updateStudent(
     if (typeof input.gender !== 'undefined') updatePayload.gender = input.gender ?? null
     if (typeof input.date_of_birth !== 'undefined') updatePayload.date_of_birth = input.date_of_birth ?? null
     if (typeof input.level !== 'undefined') updatePayload.level = input.level ?? null
+    if (typeof input.asal_sekolah !== 'undefined') updatePayload.asal_sekolah = input.asal_sekolah ?? null
     if (typeof input.achivements !== 'undefined') updatePayload.achivements = input.achivements ?? null
     if (typeof input.address !== 'undefined') updatePayload.address = input.address ?? null
     if (typeof input.status !== 'undefined') updatePayload.status = input.status ?? null

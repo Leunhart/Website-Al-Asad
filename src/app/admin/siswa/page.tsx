@@ -94,6 +94,7 @@ const Siswa = () => {
                 gender: data.gender || undefined,
                 date_of_birth: data.date_of_birth || undefined,
                 level: data.level || undefined,
+                asal_sekolah: data.asal_sekolah || undefined,
                 achivements: data.achivements || undefined,
                 address: data.address || undefined,
                 status: data.status || 'active'
@@ -134,6 +135,7 @@ const Siswa = () => {
                 gender: data.gender || undefined,
                 date_of_birth: data.date_of_birth || undefined,
                 level: data.level || undefined,
+                asal_sekolah: data.asal_sekolah || undefined,
                 achivements: data.achivements || undefined,
                 address: data.address || undefined,
                 status: data.status || undefined
@@ -309,6 +311,7 @@ const Siswa = () => {
                             <div className="space-y-1 mb-4">
                                 {student.gender && <p className="text-gray-600 text-sm">👤 {student.gender === 'pria' ? 'Laki-laki' : student.gender === 'wanita' ? 'Perempuan' : student.gender}</p>}
                                 {student.date_of_birth && <p className="text-gray-600 text-sm">🎂 {new Date(student.date_of_birth).toLocaleDateString('id-ID')}</p>}
+                                {student.asal_sekolah && <p className="text-gray-600 text-sm">Asal Sekolah: {student.asal_sekolah}</p>}
                                 {student.address && <p className="text-gray-600 text-sm">📍 {student.address}</p>}
                             </div>
                             <div className="flex gap-2">

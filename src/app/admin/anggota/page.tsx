@@ -39,12 +39,12 @@ const Anggota = () => {
             const result = await createUser(userData)
             if (result.success) {
                 await loadUsers() // Refresh the list
-                console.log('Anggota berhasil ditambahkan')
+                console.log('Pelatih berhasil ditambahkan')
             } else {
-                console.error('Error adding anggota:', result.error)
+                console.error('Error adding pelatih:', result.error)
             }
         } catch (error) {
-            console.error('Error adding anggota:', error)
+            console.error('Error adding pelatih:', error)
         }
     }
 
@@ -73,7 +73,7 @@ const Anggota = () => {
                 setIsFormOpen(false) // Close form if no changes
             }
         } catch (error) {
-            console.error('Error updating anggota:', error)
+            console.error('Error updating pelatih:', error)
         }
     }
 
@@ -111,15 +111,15 @@ const Anggota = () => {
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Manajemen Anggota</h1>
-                    <p className="text-gray-600 mt-1">Kelola data atlet, pelatih, dan anggota akademi</p>
+                    <h1 className="text-3xl font-bold text-gray-900">Manajemen Pelatih</h1>
+                    <p className="text-gray-600 mt-1">Kelola data pelatih akademi</p>
                 </div>
                 <button
                     onClick={openAddForm}
                     className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
                 >
                     <span className="text-lg">+</span>
-                    Tambah Anggota
+                    Tambah Pelatih
                 </button>
             </div>
 
@@ -182,8 +182,8 @@ const Anggota = () => {
                 )) : (
                     <div className="col-span-full bg-gray-50 rounded-xl p-8 text-center">
                         <div className="text-6xl mb-4">👥</div>
-                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Belum ada anggota</h3>
-                        <p className="text-gray-500">Tambahkan anggota pertama untuk memulai</p>
+                        <h3 className="text-xl font-semibold text-gray-700 mb-2">Belum ada pelatih</h3>
+                        <p className="text-gray-500">Tambahkan pelatih pertama untuk memulai</p>
                     </div>
                 )}
             </div>

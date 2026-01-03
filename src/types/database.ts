@@ -96,6 +96,7 @@ export interface Student {
   gender: string | null;
   date_of_birth: string | null;
   level: string | null;
+  asal_sekolah: string | null;
   achivements: string | null;
   address: string | null;
   status: string | null; // expected: active | inactive
