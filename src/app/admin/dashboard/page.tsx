@@ -394,10 +394,45 @@ const Dashboard = () => {
                             <div className="text-center py-4">
                                 <p className="text-gray-500">Memuat aktivitas...</p>
                             </div>
-                        ) : recentActivities.length > 0 ? recentActivities.map((activity, index) => (
-                            <div key={index} className={`flex items-start gap-4 p-3 bg-gray-50 rounded-lg border-l-4 border-${activity.color}-400`}>
-                                <div className={`bg-${activity.color}-50 rounded-full p-2`}>
-                                    <span className={`text-${activity.color}-600 text-sm`}>{activity.icon}</span>
+                        ) : recentActivities.length > 0 ? recentActivities.map((activity, index) => {
+                            const colorMap = {
+                                'green': {
+                                    border: 'border-green-400',
+                                    bg: 'bg-green-50',
+                                    text: 'text-green-600'
+                                },
+                                'orange': {
+                                    border: 'border-orange-400',
+                                    bg: 'bg-orange-50',
+                                    text: 'text-orange-600'
+                                },
+                                'blue': {
+                                    border: 'border-blue-400',
+                                    bg: 'bg-blue-50',
+                                    text: 'text-blue-600'
+                                },
+                                'purple': {
+                                    border: 'border-purple-400',
+                                    bg: 'bg-purple-50',
+                                    text: 'text-purple-600'
+                                },
+                                'indigo': {
+                                    border: 'border-indigo-400',
+                                    bg: 'bg-indigo-50',
+                                    text: 'text-indigo-600'
+                                }
+                            };
+                            
+                            const colors = colorMap[activity.color as keyof typeof colorMap] || {
+                                border: 'border-gray-400',
+                                bg: 'bg-gray-50',
+                                text: 'text-gray-600'
+                            };
+                            
+                            return (
+                            <div key={index} className={`flex items-start gap-4 p-3 bg-gray-50 rounded-lg border-l-4 ${colors.border}`}>
+                                <div className={`${colors.bg} rounded-full p-2`}>
+                                    <span className={`${colors.text} text-sm`}>{activity.icon}</span>
                                 </div>
                                 <div>
                                     <p className="font-medium text-gray-900 text-sm">{activity.title}</p>
@@ -405,7 +440,7 @@ const Dashboard = () => {
                                     <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
                                 </div>
                             </div>
-                        )) : (
+                        )}) : (
                             <div className="text-center py-4">
                                 <p className="text-gray-500">Belum ada aktivitas terbaru</p>
                             </div>
