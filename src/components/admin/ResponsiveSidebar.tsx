@@ -14,13 +14,11 @@ export default function ResponsiveSidebar() {
 
   const navItems = [
     { href: "/admin/dashboard", icon: LayoutDashboard, text: "Dashboard" },
-    { href: "/admin/anggota", icon: User, text: "Anggota" },
+    { href: "/admin/anggota", icon: User, text: "Pelatih" },
     { href: "/admin/lomba", icon: Trophy, text: "Lomba" },
-    { href: "/admin/peralatan", icon: Wrench, text: "Peralatan" },
-    { href: "/admin/jadwal", icon: Calendar, text: "Jadwal Latihan" },
     { href: "/admin/prestasi", icon: Award, text: "Prestasi" },
     { href: "/admin/akademi", icon: Building, text: "Akademi" },
-    { href: "/admin/siswa", icon: GraduationCap, text: "Pelajar" },
+    { href: "/admin/siswa", icon: GraduationCap, text: "Archer" },
     { href: "/admin/testimoni", icon: MessageSquare, text: "Testimoni" },
     { href: "/admin/registrasi", icon: CheckCircle, text: "Registrasi" },
   ]
