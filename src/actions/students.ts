@@ -36,7 +36,7 @@ export async function getStudents(
   try {
     let query = supabase
       .from('students')
-      .select('id_students, full_name, status, level, gender, date_of_birth, address', { count: 'exact' })
+      .select('id_students, full_name, status, level, asal_sekolah, gender, date_of_birth, address', { count: 'exact' })
       .order('full_name', { ascending: true })
 
     // Apply search filter if provided

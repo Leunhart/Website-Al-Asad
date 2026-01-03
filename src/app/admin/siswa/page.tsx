@@ -17,7 +17,7 @@ const Siswa = () => {
     const [queryCache, setQueryCache] = useState<{[key: string]: {data: any[], count: number}}>({})
     const pageSize = 10
     const searchTimeout = useRef<NodeJS.Timeout | null>(null)
-
+    console.log(students)
     useEffect(() => {
         loadStudents()
     }, [])
