@@ -315,7 +315,7 @@ const Dashboard = () => {
                                                 fontSize: '12px'
                                             }}
                                             labelStyle={{ color: '#374151', fontWeight: 'bold' }}
-                                            formatter={(value: any, name: string) => {
+                                            formatter={(value: any, name: any) => {
                                                 if (value === undefined || value === null) return ['', ''];
                                                 return [
                                                     value.toString(),
