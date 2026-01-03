@@ -1,6 +1,6 @@
 const galleryImages = [
   {
-    url: 'https://images.unsplash.com/photo-1518834107812-67b50fbc1ae1?auto=format&fit=crop&w=800&q=80',
+    url: '/IMG_2467.webp',
     title: 'Lapangan Panahan'
   },
   {

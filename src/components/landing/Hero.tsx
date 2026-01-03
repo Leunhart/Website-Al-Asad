@@ -4,7 +4,12 @@ export default function Hero() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         {/* External background image (ensure usage complies with copyright) */}
-        <div className="absolute inset-0 bg-[url('https://static.wikia.nocookie.net/webarebears/images/2/25/CARE1012051700029599_003_640x360.jpg')] bg-cover bg-center" />
+        <div className="absolute inset-0 bg-cover bg-center"/>
+        <img
+          src="/mainlanding.webp"
+          alt="Background Hero"
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-black/55" />
       </div>
 
