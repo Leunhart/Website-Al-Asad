@@ -315,10 +315,13 @@ const Dashboard = () => {
                                                 fontSize: '12px'
                                             }}
                                             labelStyle={{ color: '#374151', fontWeight: 'bold' }}
-                                            formatter={(value: number, name: string) => [
-                                                value,
-                                                name === 'coach' ? 'Coach' : 'Siswa'
-                                            ]}
+                                            formatter={(value: any, name: string) => {
+                                                if (value === undefined || value === null) return ['', ''];
+                                                return [
+                                                    value.toString(),
+                                                    name === 'coach' ? 'Coach' : 'Siswa'
+                                                ];
+                                            }}
                                         />
                                         <Legend
                                             wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
