@@ -1,29 +1,13 @@
+import Image from "next/image"; // 1. Import ini
+
 const galleryImages = [
-  {
-    url: '/IMG_2467.webp',
-    title: 'Lapangan Panahan'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=800&q=80',
-    title: 'Target Practice'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
-    title: 'Latihan Outdoor'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=80',
-    title: 'Fasilitas Club'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80',
-    title: 'Suasana Latihan'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80',
-    title: 'Lingkungan Alam'
-  }
-]
+  { url: '/IMG_2467.webp', title: 'Lapangan Panahan' },
+  { url: '/IMG_7410.webp', title: 'Target Practice' },
+  { url: '/IMG_2451.webp', title: 'Latihan Outdoor' },
+  { url: '/IMG_2452.webp', title: 'Fasilitas Club' },
+  { url: '/IMG_7401.webp', title: 'Suasana Latihan' },
+  { url: '/IMG_3517.webp', title: 'Lingkungan Alam' }
+];
 
 export default function Gallery() {
   return (
@@ -34,18 +18,26 @@ export default function Gallery() {
           Lihat suasana latihan dan fasilitas kami
         </p>
       </div>
+      
       <div className="grid gap-6 grid-cols-2 md:grid-cols-3">
         {galleryImages.map((img, i) => (
-          <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.22)] hover:shadow-[0_18px_60px_rgba(0,0,0,0.28)] transition-all duration-300 group border-2 border-transparent hover:border-[#C29A13] bg-[#3C2D21]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img 
-              src={img.url} 
-              alt={img.title} 
-              className="w-full h-full object-cover group-hover:scale-110 transition duration-500" 
+          <div 
+            key={i} 
+            // Tambahkan class 'relative' agar Image fill bekerja dgn benar
+            className="relative aspect-[4/3] rounded-xl overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.22)] hover:shadow-[0_18px_60px_rgba(0,0,0,0.28)] transition-all duration-300 group border-2 border-transparent hover:border-[#C29A13] bg-[#3C2D21]"
+          >
+            <Image
+              src={img.url}
+              alt={img.title}
+              fill // Mengisi parent container (aspect-4/3)
+              // Prop sizes ini SANGAT PENTING untuk performa
+              // Browser akan download gambar kecil di HP, dan gambar besar di Desktop
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover group-hover:scale-110 transition duration-500"
             />
           </div>
         ))}
       </div>
     </section>
-  )
+  );
 }

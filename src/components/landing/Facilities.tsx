@@ -6,10 +6,10 @@ const features = [
 ]
 
 const gallery = [
-  'https://images.unsplash.com/photo-1518834107812-67b50fbc1ae1?auto=format&fit=crop&w=800&q=60',
-  'https://images.unsplash.com/photo-1482192505345-5655af888cc4?auto=format&fit=crop&w=800&q=60',
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60',
-  'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=800&q=60',
+  '/kebersmaan.webp',
+  '/IMG_2429.webp',
+  '/peralatan.webp',
+  '/IMG_3491.webp',
 ]
 
 export default function Facilities() {
