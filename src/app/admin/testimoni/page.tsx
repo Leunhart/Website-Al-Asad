@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react'
 import TestimoniForm from '../../../components/forms/TestimoniForm'
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '../../../actions/testimonials'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 const Testimoni = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [editingData, setEditingData] = useState<any>(null)
     const [testimonials, setTestimonials] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [exporting, setExporting] = useState(false)
 
     useEffect(() => {
         loadTestimonials()
@@ -99,6 +101,31 @@ const Testimoni = () => {
         return '⭐'.repeat(rating) + '☆'.repeat(5 - rating)
     }
 
+    const handleExportExcel = async () => {
+        try {
+            setExporting(true)
+            if (!testimonials.length) {
+                alert('Tidak ada data testimoni untuk diekspor')
+                return
+            }
+
+            const rows = testimonials.map((testimonial) => ({
+                ID: testimonial.unique_id,
+                Nama: testimonial.reviewer_name,
+                Rating: testimonial.rating || '-',
+                Isi: testimonial.content,
+                Akademi: testimonial.id_academies || '-'
+            }))
+
+            await exportToXlsx('testimoni', rows)
+        } catch (error) {
+            console.error('Error exporting testimonials:', error)
+            alert('Gagal mengekspor data testimoni')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -106,13 +133,22 @@ const Testimoni = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Manajemen Testimoni</h1>
                     <p className="text-gray-600 mt-1">Kelola testimoni dan ulasan dari siswa</p>
                 </div>
-                <button
-                    onClick={openAddForm}
-                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-                >
-                    <span className="text-lg">+</span>
-                    Tambah Testimoni
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleExportExcel}
+                        disabled={exporting}
+                        className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                    >
+                        {exporting ? 'Mengekspor...' : 'Export Excel'}
+                    </button>
+                    <button
+                        onClick={openAddForm}
+                        className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    >
+                        <span className="text-lg">+</span>
+                        Tambah Testimoni
+                    </button>
+                </div>
             </div>
 
             <TestimoniForm

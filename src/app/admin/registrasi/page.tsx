@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 interface Registration {
     id_registrations: string
@@ -18,6 +19,7 @@ const Registrasi = () => {
     const [registrations, setRegistrations] = useState<Registration[]>([])
     const [loading, setLoading] = useState(true)
     const [processing, setProcessing] = useState<string | null>(null)
+    const [exporting, setExporting] = useState(false)
 
     useEffect(() => {
         loadRegistrations()
@@ -39,6 +41,35 @@ const Registrasi = () => {
             console.error('Error loading registrations:', error)
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleExport = async () => {
+        try {
+            setExporting(true)
+            if (!registrations.length) {
+                alert('Tidak ada data registrasi untuk diekspor')
+                return
+            }
+
+            const rows = registrations.map((reg) => ({
+                ID: reg.id_registrations,
+                Nama: reg.full_name,
+                Gender: reg.gender || '-',
+                Tanggal_Lahir: reg.date_of_birth ? new Date(reg.date_of_birth).toLocaleDateString('id-ID') : '-',
+                Telepon: reg.phone || '-',
+                Alamat: reg.address || '-',
+                Level: reg.level_requested || '-',
+                Status: reg.status || '-',
+                Dibuat: reg.created_at ? new Date(reg.created_at).toLocaleString('id-ID') : '-'
+            }))
+
+            await exportToXlsx('registrasi', rows)
+        } catch (error) {
+            console.error('Error exporting registrations:', error)
+            alert('Gagal mengekspor data registrasi')
+        } finally {
+            setExporting(false)
         }
     }
 
@@ -97,6 +128,13 @@ const Registrasi = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Persetujuan Registrasi</h1>
                     <p className="text-gray-600 mt-1">Kelola permintaan registrasi siswa baru</p>
                 </div>
+                <button
+                    onClick={handleExport}
+                    disabled={exporting}
+                    className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                >
+                    {exporting ? 'Mengekspor...' : 'Export Excel'}
+                </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

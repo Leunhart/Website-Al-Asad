@@ -119,7 +119,7 @@ Aplikasi Akademi Panahan adalah sistem manajemen komprehensif yang dirancang khu
 - `/admin/prestasi` - Manajemen data prestasi
 - `/admin/jadwal` - Manajemen jadwal latihan
 - `/admin/peralatan` - Manajemen inventaris peralatan
-- `/admin/anggota` - Manajemen data anggota/pelatih
+- `/admin/coach` - Manajemen data pelatih
 
 ### Fitur Admin
 1. **Dashboard Analytics**

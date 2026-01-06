@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react'
 import LombaForm from '@/src/components/forms/LombaForm'
 import { getCompetitions, createCompetition, updateCompetition, deleteCompetition } from '../../../actions/competitions'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 const Lomba = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [editingData, setEditingData] = useState<any>(null)
     const [competitions, setCompetitions] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [exporting, setExporting] = useState(false)
 
     useEffect(() => {
         loadCompetitions()
@@ -97,6 +99,32 @@ const Lomba = () => {
         setIsFormOpen(true)
     }
 
+    const handleExportExcel = async () => {
+        try {
+            setExporting(true)
+            if (!competitions.length) {
+                alert('Tidak ada data lomba untuk diekspor')
+                return
+            }
+
+            const rows = competitions.map((competition) => ({
+                ID: competition.id_competitions,
+                Nama: competition.event_name,
+                Penyelenggara: competition.organizer || '-',
+                Lokasi: competition.location || '-',
+                Mulai: competition.start_date ? new Date(competition.start_date).toLocaleDateString('id-ID') : '-',
+                Selesai: competition.end_date ? new Date(competition.end_date).toLocaleDateString('id-ID') : '-'
+            }))
+
+            await exportToXlsx('lomba', rows)
+        } catch (error) {
+            console.error('Error exporting competitions:', error)
+            alert('Gagal mengekspor data lomba')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -104,13 +132,22 @@ const Lomba = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Manajemen Lomba</h1>
                     <p className="text-gray-600 mt-1">Kelola kompetisi dan turnamen panahan</p>
                 </div>
-                <button
-                    onClick={openAddForm}
-                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-                >
-                    <span className="text-lg">+</span>
-                    Tambah Lomba
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleExportExcel}
+                        disabled={exporting}
+                        className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                    >
+                        {exporting ? 'Mengekspor...' : 'Export Excel'}
+                    </button>
+                    <button
+                        onClick={openAddForm}
+                        className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    >
+                        <span className="text-lg">+</span>
+                        Tambah Lomba
+                    </button>
+                </div>
             </div>
 
             <LombaForm

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import SiswaForm from '../../../components/forms/SiswaForm'
 import { getStudents, createStudent, updateStudent, deleteStudent } from '../../../actions/students'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 const Siswa = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
@@ -15,6 +16,7 @@ const Siswa = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [academyFilter, setAcademyFilter] = useState<number | null>(null)
     const [queryCache, setQueryCache] = useState<{[key: string]: {data: any[], count: number}}>({})
+    const [exporting, setExporting] = useState(false)
     const pageSize = 10
     const searchTimeout = useRef<NodeJS.Timeout | null>(null)
     console.log(students)
@@ -189,6 +191,35 @@ const Siswa = () => {
         setIsFormOpen(true)
     }
 
+    const handleExportExcel = async () => {
+        try {
+            setExporting(true)
+            const { data } = await getStudents()
+            if (!data || data.length === 0) {
+                alert('Tidak ada data siswa untuk diekspor')
+                return
+            }
+
+            const rows = data.map((student) => ({
+                ID: student.id_students,
+                Nama: student.full_name,
+                Gender: student.gender || '-',
+                Tanggal_Lahir: student.date_of_birth ? new Date(student.date_of_birth).toLocaleDateString('id-ID') : '-',
+                Level: student.level || '-',
+                Status: student.status || '-',
+                Asal_Sekolah: student.asal_sekolah || '-',
+                Alamat: student.address || '-'
+            }))
+
+            await exportToXlsx('siswa', rows)
+        } catch (error) {
+            console.error('Error exporting students:', error)
+            alert('Gagal mengekspor data siswa')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -196,13 +227,22 @@ const Siswa = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Manajemen Pelajar</h1>
                     <p className="text-gray-600 mt-1">Kelola data pelajar akademi panahan</p>
                 </div>
-                <button
-                    onClick={openAddForm}
-                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-                >
-                    <span className="text-lg">+</span>
-                    Tambah Pelajar
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleExportExcel}
+                        disabled={exporting}
+                        className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                    >
+                        {exporting ? 'Mengekspor...' : 'Export Excel'}
+                    </button>
+                    <button
+                        onClick={openAddForm}
+                        className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    >
+                        <span className="text-lg">+</span>
+                        Tambah Pelajar
+                    </button>
+                </div>
             </div>
 
             <SiswaForm

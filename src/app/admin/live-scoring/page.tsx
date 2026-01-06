@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import LiveScoringForm from '@/src/components/forms/LiveScoringForm'
 import { getCompetitions } from '../../../actions/competitions'
 import { getLiveScores, createLiveScore, updateLiveScore, deleteLiveScore } from '../../../actions/live-scoring'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 const LiveScoring = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
@@ -12,6 +13,7 @@ const LiveScoring = () => {
     const [liveScores, setLiveScores] = useState<any[]>([])
     const [selectedCompetition, setSelectedCompetition] = useState<number | null>(null)
     const [loading, setLoading] = useState(true)
+    const [exporting, setExporting] = useState(false)
 
     useEffect(() => {
         loadCompetitions()
@@ -117,6 +119,39 @@ const LiveScoring = () => {
         setIsFormOpen(true)
     }
 
+    const handleExportExcel = async () => {
+        try {
+            if (!selectedCompetition) {
+                alert('Pilih kompetisi terlebih dahulu')
+                return
+            }
+
+            setExporting(true)
+
+            if (!liveScores.length) {
+                alert('Tidak ada skor untuk diekspor')
+                return
+            }
+
+            const competition = competitions.find((c) => c.id_competitions === selectedCompetition)
+            const rows = liveScores.map((score) => ({
+                ID: score.id_live_scores,
+                Atlet: score.athlete_name,
+                Skor: score.score,
+                Ronde: score.round,
+                Catatan: score.notes || '-',
+                Kompetisi: competition?.event_name || selectedCompetition
+            }))
+
+            await exportToXlsx(`live-score-${competition?.event_name || selectedCompetition}`, rows)
+        } catch (error) {
+            console.error('Error exporting live scores:', error)
+            alert('Gagal mengekspor data live scoring')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -152,13 +187,22 @@ const LiveScoring = () => {
                             <h3 className="text-xl font-semibold text-gray-800">
                                 Skor untuk Kompetisi Terpilih
                             </h3>
-                            <button
-                                onClick={openAddForm}
-                                className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-                            >
-                                <span className="text-lg">+</span>
-                                Tambah Skor
-                            </button>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleExportExcel}
+                                    disabled={exporting}
+                                    className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                                >
+                                    {exporting ? 'Mengekspor...' : 'Export Excel'}
+                                </button>
+                                <button
+                                    onClick={openAddForm}
+                                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                                >
+                                    <span className="text-lg">+</span>
+                                    Tambah Skor
+                                </button>
+                            </div>
                         </div>
 
                         <LiveScoringForm

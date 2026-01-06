@@ -9,7 +9,7 @@ const Sidebar = () => {
         <Link href="/admin/dashboard" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
           <span className="mr-3 text-gray-500"><LayoutDashboard size={18}/></span> <span className="font-medium text-gray-700">Dashboard</span>
         </Link>
-        <Link href="/admin/anggota" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
+        <Link href="/admin/coach" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">
           <span className="mr-3 text-gray-500"><User size={18}/></span> <span className="font-medium text-gray-700">Pelatih</span>
         </Link>
         <Link href="/admin/lomba" className="flex items-center py-3 px-4 rounded-lg hover:bg-red-50 hover:text-red-900 transition-all duration-200 border-l-4 border-transparent hover:border-red-600">

@@ -14,7 +14,7 @@ export default function ResponsiveSidebar() {
 
   const navItems = [
     { href: "/admin/dashboard", icon: LayoutDashboard, text: "Dashboard" },
-    { href: "/admin/anggota", icon: User, text: "Pelatih" },
+    { href: "/admin/coach", icon: User, text: "Pelatih" },
     { href: "/admin/lomba", icon: Trophy, text: "Lomba" },
     { href: "/admin/live-scoring", icon: CheckCircle, text: "Live Scoring" },
     { href: "/admin/peralatan", icon: Wrench, text: "Peralatan" },

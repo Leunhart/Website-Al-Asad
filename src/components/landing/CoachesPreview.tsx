@@ -22,7 +22,7 @@ export default function CoachesPreview({ coaches }: Props) {
               <img
                 src={c.photo}
                 alt={c.full_name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-full"
               />
             ) : (
               <span className="text-4xl text-[#EEEAE4]">👤</span>

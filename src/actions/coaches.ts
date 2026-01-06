@@ -1,7 +1,24 @@
 'use server'
 
+import { randomUUID } from 'crypto'
 import { supabase } from '../lib/supabase'
+import { getSupabaseAdmin } from '../lib/supabase-admin'
 import { Coach } from '../types/database'
+
+const COACH_PHOTO_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_COACH_BUCKET || 'coach-photos'
+const ALLOWED_COACH_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp']
+const MAX_COACH_IMAGE_SIZE = 5 * 1024 * 1024
+const extractPathFromPublicUrl = (url: string): string | null => {
+  try {
+    const u = new URL(url)
+    const marker = `/public/${COACH_PHOTO_BUCKET}/`
+    const idx = u.pathname.indexOf(marker)
+    if (idx === -1) return null
+    return u.pathname.slice(idx + marker.length)
+  } catch {
+    return null
+  }
+}
 
 export type NewCoachInput = {
   full_name: string
@@ -15,6 +32,51 @@ export type UpdateCoachInput = {
   phone?: string | null
   photo?: string | null
   id_academies?: number | null
+}
+
+export async function uploadCoachPhoto(
+  file: File,
+  opts?: { existingPath?: string }
+): Promise<{ url: string; path: string } | { error: string }> {
+  if (!(file instanceof File)) {
+    return { error: 'File is required' }
+  }
+
+  if (!ALLOWED_COACH_IMAGE_TYPES.includes(file.type)) {
+    return { error: 'Tipe file tidak didukung. Gunakan PNG, JPG, atau WEBP.' }
+  }
+
+  if (file.size > MAX_COACH_IMAGE_SIZE) {
+    return { error: 'Ukuran file melebihi 5MB setelah kompresi. Kecilkan file dan coba lagi.' }
+  }
+
+  const supabaseAdmin = getSupabaseAdmin()
+  const extension = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg'
+  const objectPath = `${new Date().getFullYear()}/${new Date().getMonth() + 1}/${randomUUID()}.${extension}`
+
+  const { data, error } = await supabaseAdmin.storage
+    .from(COACH_PHOTO_BUCKET)
+    .upload(objectPath, file, {
+      contentType: file.type,
+      upsert: true,
+    })
+
+  if (error) {
+    console.error('[uploadCoachPhoto] error:', error)
+    return { error: 'Gagal mengunggah foto' }
+  }
+
+  if (opts?.existingPath) {
+    await supabaseAdmin.storage.from(COACH_PHOTO_BUCKET).remove([opts.existingPath]).catch((removeErr) => {
+      console.warn('[uploadCoachPhoto] gagal menghapus foto lama:', removeErr)
+    })
+  }
+
+  const { data: publicData } = supabaseAdmin.storage
+    .from(COACH_PHOTO_BUCKET)
+    .getPublicUrl(data.path)
+
+  return { url: publicData.publicUrl, path: data.path }
 }
 
 export async function getCoaches(): Promise<Coach[]> {
@@ -116,6 +178,19 @@ export async function updateCoach(
 
 export async function deleteCoach(id: number): Promise<boolean> {
   try {
+    const supabaseAdmin = getSupabaseAdmin()
+
+    // Grab existing photo path before deletion
+    const { data: existing, error: fetchError } = await supabase
+      .from('coaches')
+      .select('photo')
+      .eq('id_coaches', id)
+      .single()
+
+    if (fetchError) {
+      console.warn('[deleteCoach] fetch photo warning:', fetchError)
+    }
+
     const { error } = await supabase
       .from('coaches')
       .delete()
@@ -124,6 +199,15 @@ export async function deleteCoach(id: number): Promise<boolean> {
     if (error) {
       console.error('[deleteCoach] error:', error)
       return false
+    }
+
+    if (existing?.photo) {
+      const path = extractPathFromPublicUrl(existing.photo)
+      if (path) {
+        supabaseAdmin.storage.from(COACH_PHOTO_BUCKET).remove([path]).catch((removeErr) => {
+          console.warn('[deleteCoach] gagal menghapus foto:', removeErr)
+        })
+      }
     }
 
     return true

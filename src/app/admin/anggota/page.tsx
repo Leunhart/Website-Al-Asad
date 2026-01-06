@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react'
 import AnggotaForm from '@/src/components/forms/AnggotaForm'
 import { getUsers, createUser, updateUser, deleteUser } from '../../../actions/users'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 const Anggota = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [editingData, setEditingData] = useState<any>(null)
     const [users, setUsers] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [exporting, setExporting] = useState(false)
 
     useEffect(() => {
         loadUsers()
@@ -107,6 +109,32 @@ const Anggota = () => {
         }
     }
 
+    const handleExportExcel = async () => {
+        try {
+            setExporting(true)
+            if (!users.length) {
+                alert('Tidak ada data anggota untuk diekspor')
+                return
+            }
+
+            const rows = users.map((user) => ({
+                ID: user.unique_id,
+                Nama: user.full_name,
+                Email: user.email,
+                Telepon: user.phone || '-',
+                Peran: user.role,
+                Bergabung: user.created_at ? new Date(user.created_at).toLocaleDateString('id-ID') : '-'
+            }))
+
+            await exportToXlsx('anggota', rows)
+        } catch (error) {
+            console.error('Error exporting users:', error)
+            alert('Gagal mengekspor data anggota')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -114,13 +142,22 @@ const Anggota = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Manajemen Pelatih</h1>
                     <p className="text-gray-600 mt-1">Kelola data pelatih akademi</p>
                 </div>
-                <button
-                    onClick={openAddForm}
-                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-                >
-                    <span className="text-lg">+</span>
-                    Tambah Pelatih
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleExportExcel}
+                        disabled={exporting}
+                        className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                    >
+                        {exporting ? 'Mengekspor...' : 'Export Excel'}
+                    </button>
+                    <button
+                        onClick={openAddForm}
+                        className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    >
+                        <span className="text-lg">+</span>
+                        Tambah Pelatih
+                    </button>
+                </div>
             </div>
 
             <AnggotaForm
