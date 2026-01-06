@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react'
 import JadwalForm from '@/src/components/forms/JadwalForm'
 import { getSchedules, createSchedule, updateSchedule, deleteSchedule } from '../../../actions/schedules'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 const Jadwal = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [editingData, setEditingData] = useState<any>(null)
     const [schedules, setSchedules] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [exporting, setExporting] = useState(false)
 
     useEffect(() => {
         loadSchedules()
@@ -103,6 +105,35 @@ const Jadwal = () => {
         setIsFormOpen(true)
     }
 
+    const handleExportExcel = async () => {
+        try {
+            setExporting(true)
+            if (!schedules.length) {
+                alert('Tidak ada data jadwal untuk diekspor')
+                return
+            }
+
+            const rows = schedules.map((schedule) => ({
+                ID: schedule.id_schedules,
+                Judul: schedule.title,
+                Hari: schedule.day,
+                Mulai: schedule.start_time,
+                Selesai: schedule.end_time,
+                Lokasi: schedule.location,
+                Pelatih: schedule.coach_name,
+                Kuota: schedule.max_participants,
+                Deskripsi: schedule.description || '-'
+            }))
+
+            await exportToXlsx('jadwal', rows)
+        } catch (error) {
+            console.error('Error exporting schedules:', error)
+            alert('Gagal mengekspor data jadwal')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -110,13 +141,22 @@ const Jadwal = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Jadwal Latihan</h1>
                     <p className="text-gray-600 mt-1">Kelola jadwal latihan dan sesi pelatihan</p>
                 </div>
-                <button
-                    onClick={openAddForm}
-                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-                >
-                    <span className="text-lg">+</span>
-                    Tambah Jadwal
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleExportExcel}
+                        disabled={exporting}
+                        className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                    >
+                        {exporting ? 'Mengekspor...' : 'Export Excel'}
+                    </button>
+                    <button
+                        onClick={openAddForm}
+                        className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    >
+                        <span className="text-lg">+</span>
+                        Tambah Jadwal
+                    </button>
+                </div>
             </div>
 
             <JadwalForm

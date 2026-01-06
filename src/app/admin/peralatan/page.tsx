@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react'
 import PeralatanForm from '@/src/components/forms/PeralatanForm'
 import { getEquipment, createEquipment, updateEquipment, deleteEquipment } from '../../../actions/equipment'
+import { exportToXlsx } from '@/src/lib/export-excel'
 
 const Peralatan = () => {
     const [isFormOpen, setIsFormOpen] = useState(false)
     const [editingData, setEditingData] = useState<any>(null)
     const [equipment, setEquipment] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [exporting, setExporting] = useState(false)
 
     useEffect(() => {
         loadEquipment()
@@ -97,6 +99,32 @@ const Peralatan = () => {
         setIsFormOpen(true)
     }
 
+    const handleExportExcel = async () => {
+        try {
+            setExporting(true)
+            if (!equipment.length) {
+                alert('Tidak ada data peralatan untuk diekspor')
+                return
+            }
+
+            const rows = equipment.map((item) => ({
+                ID: item.id_equipment,
+                Nama: item.name,
+                Jenis: item.type,
+                Stok: item.quantity,
+                Kondisi: item.condition,
+                Lokasi: item.location
+            }))
+
+            await exportToXlsx('peralatan', rows)
+        } catch (error) {
+            console.error('Error exporting equipment:', error)
+            alert('Gagal mengekspor data peralatan')
+        } finally {
+            setExporting(false)
+        }
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex justify-between items-center">
@@ -104,13 +132,22 @@ const Peralatan = () => {
                     <h1 className="text-3xl font-bold text-gray-900">Manajemen Peralatan</h1>
                     <p className="text-gray-600 mt-1">Kelola inventaris dan kondisi peralatan panahan</p>
                 </div>
-                <button
-                    onClick={openAddForm}
-                    className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
-                >
-                    <span className="text-lg">+</span>
-                    Tambah Peralatan
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleExportExcel}
+                        disabled={exporting}
+                        className="bg-white border border-gray-300 text-gray-800 px-4 py-3 rounded-lg shadow-sm hover:shadow transition-all duration-200 disabled:opacity-60"
+                    >
+                        {exporting ? 'Mengekspor...' : 'Export Excel'}
+                    </button>
+                    <button
+                        onClick={openAddForm}
+                        className="bg-red-900 hover:bg-red-800 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+                    >
+                        <span className="text-lg">+</span>
+                        Tambah Peralatan
+                    </button>
+                </div>
             </div>
 
             <PeralatanForm
